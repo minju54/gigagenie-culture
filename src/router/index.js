@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../components/Home.vue'
+import MainCategory from '../components/Main/MainCategory.vue'
 import Detail from '../components/Detail/Detail.vue'
 import DetailFavor from '../components/Detail/DetailFavor.vue'
 import DetailFee from '../components/Detail/DetailFee.vue'
@@ -18,6 +19,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    }, 
+    {
+      path: '/mainCategory',
+      name: 'mainCategory',
+      component: MainCategory
     }, 
     {
       path: '/detail',

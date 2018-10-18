@@ -58,7 +58,6 @@ export default {
     created() {
         this.init();
         this.getVoiceCommand();
-        this.apiTest();
     },
     methods: {
         init() {
@@ -112,7 +111,8 @@ export default {
         },
         start() {
             var self = this;
-            setTimeout(function() {self.$router.push('/detail/favor')}, 2000);
+            // setTimeout(function() {self.$router.push('/detail/favor')}, 2000);
+            setTimeout(function() {self.$router.push('/mainCategory')}, 2000);
             self.getUserAddress();
         },
         getUserAddress() {
@@ -156,16 +156,6 @@ export default {
                 }
                 else {
                     console.log("[MainContent]음성인식 중단 실패: " + result_msg);
-                }
-            });
-        },
-        apiTest() {
-            this.$http.get('/api')
-            .then(function(response) {
-                if (response.status === 200) {
-                    console.log('[MainContent]success', response.data);
-                } else {
-                    console.log('[MainContent]fail', response.status);
                 }
             });
         }
