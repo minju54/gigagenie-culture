@@ -127,13 +127,13 @@ export default {
             var options={};
             gigagenie.voice.stopTTS(options,function(result_cd, result_msg, extra) {
                 if (result_cd==200) {
-                    console.log("음성인식 중단 성공");
+                    console.log("[DetailFavor]음성인식 중단 성공");
                 }
                 else if (result_cd==404) {
-                    console.log("음성인식 실행 중이 아님");
+                    console.log("[DetailFavor]음성인식 실행 중이 아님");
                 }
                 else {
-                    console.log("음성인식 중단 실패: " + result_msg);
+                    console.log("[DetailFavor]음성인식 중단 실패: " + result_msg);
                 }
             });
         },
@@ -157,7 +157,7 @@ export default {
             gigagenie.voice.onVoiceCommand=function(event){
                 switch(event){
                     case 'prevPage':
-                        self.$router.replace({path: '/'});
+                        self.$router.replace({path: '/mainCategory'});
                         console.log('[DetailFavor] 이전 페이지');
                         break;
                     case 'nextPage':
@@ -258,7 +258,7 @@ export default {
             //         this.$router.push({path: '/detail/group'});
             //         break;
             //     case 3:
-            //         this.$router.push({path: '/detail/fee'});
+            //         this.$router.push({path: '/detail/price'});
             //         break;
             //     case 4:
             //         this.$router.push({path: '/detail/date'});

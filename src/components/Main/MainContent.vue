@@ -127,6 +127,9 @@ export default {
                 } else {
                     console.log("Getting Home Address fail.");
                 }
+                if (address == "") {
+                    address = '서울'; // 기본값 서울
+                }
                 self.$store.commit('setAddress', address);
             });
         },

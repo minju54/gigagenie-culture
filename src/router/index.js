@@ -4,10 +4,11 @@ import Home from '../components/Home.vue'
 import MainCategory from '../components/Main/MainCategory.vue'
 import Detail from '../components/Detail/Detail.vue'
 import DetailFavor from '../components/Detail/DetailFavor.vue'
-import DetailFee from '../components/Detail/DetailFee.vue'
+import DetailPrice from '../components/Detail/DetailPrice.vue'
 import DetailGroup from '../components/Detail/DetailGroup.vue'
 import DetailDate from '../components/Detail/DetailDate.vue'
 import ResultMain from '../components/Result/ResultMain.vue'
+import ResultToday from '../components/Result/ResultToday.vue'
 import NotFound from '../components/NotFound.vue'
 
 // 뷰 어플리케이션에 라우터 플러그인을 추가
@@ -41,9 +42,9 @@ export default new Router({
           component: DetailFavor
         },
         {
-          path: 'fee',
-          name: 'detailFee',
-          component: DetailFee
+          path: 'price',
+          name: 'detailPrice',
+          component: DetailPrice
         }, {
           path: 'date',
           name: 'detailDate',
@@ -55,6 +56,11 @@ export default new Router({
       path: '/resultMain',
       name: 'resultMain',
       component: ResultMain
+    }, 
+    {
+      path: '/resultToday',
+      name: 'resultToday',
+      component: ResultToday
     }, 
     {
       path: '*',

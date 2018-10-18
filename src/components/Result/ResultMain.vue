@@ -25,7 +25,7 @@
                   </div>
                   <div class="row" id="text-content-row">
                       <div class="col-sm-3" id="text-title"><b>요금</b></div>
-                      <div class="col-sm-9" id="text-content">{{ show_fee }}</div>
+                      <div class="col-sm-9" id="text-content">{{ show_price }}</div>
                   </div>
                   <div class="row" id="text-content-row">
                       <div class="col-sm-3" id="text-title"><b>문의</b></div>
@@ -62,13 +62,13 @@ export default {
       show_place: "",
       show_place_detail: "",
       show_date: "",
-      show_fee: "",
+      show_price: "",
       show_phone_number: "",
       show_contents: "",
       show_thumbnail: "",
       userGroup: "",
       userFavor: "",
-      userFee: "",
+      userPrice: "",
       userDate: "",
       userAddress: "",
       dt_start: new Date(),
@@ -77,7 +77,7 @@ export default {
       showSeqNum: "",
       options : {},
       dateMatched : 1, 
-      feeMatched : 0, // true : 1, false : 0
+      priceMatched : 0, // true : 1, false : 0
       infoMatched : 1, // 해당 정보가 아예 없는 경우 : 0
       retry : 0 // 탐색 한번만 할 수 있게 함
     };
@@ -153,13 +153,10 @@ export default {
     getRecommandData() {
       this.userGroup = this.$store.getters.getGroup;
       this.userFavor = this.$store.getters.getFavor;
-      this.userFee = this.$store.getters.getFee;
+      this.userPrice = this.$store.getters.getPrice;
       this.userDate = this.$store.getters.getDate;
       this.userAddress = this.$store.getters.getAddress;
-      if (this.userAddress == "" ) {
-        this.userAddress = '서울'; // 기본값 서울로 설정..
-      }
-      console.log(this.userGroup + ", " + this.userFavor + ", " + this.userFee + ", " + this.userDate + ", " + this.userAddress);
+      console.log(this.userGroup + ", " + this.userFavor + ", " + this.userPrice + ", " + this.userDate + ", " + this.userAddress);
 
       // Favor
       if (this.userFavor === "play") {
@@ -263,23 +260,23 @@ export default {
         // 받아온 리스트 중에서 무료 / 유료 따로 뽑아내기
         for (idx in resArray) {
           var detailData = resArray[idx].data;
-          var feeValue = $(detailData).find("price").text();
+          var priceValue = $(detailData).find("price").text();
           var area = $(detailData).find("area").text();
 
-          if (this.$store.getters.getFee === "nothing") { // 금액 상관없으면 바로 row[0] 가져오고 break
+          if (this.$store.getters.getPrice === "nothing") { // 금액 상관없으면 바로 row[0] 가져오고 break
             console.log('seqNum: ', $(detailData).find("seq").text());
             break;
           } else {
-            if (feeValue.match(/무료/)) {
-              if (this.$store.getters.getFee === "free") {
+            if (priceValue.match(/무료/)) {
+              if (this.$store.getters.getPrice === "free") {
                 console.log('seqNum: ', $(detailData).find("seq").text());
-                this.feeMatched = 1;
+                this.priceMatched = 1;
                 break;
               }
             } else {
-              if (this.$store.getters.getFee === "pay") {
+              if (this.$store.getters.getPrice === "pay") {
                 console.log('seqNum: ', $(detailData).find("seq").text());
-                this.feeMatched = 1;
+                this.priceMatched = 1;
                 break;
               }
             }
@@ -289,7 +286,7 @@ export default {
         // 화면에 데이터 뿌리기 (썸네일, 타이틀, 가격, 문의, 장소)
         this.show_thumbnail = $(detailData).find("imgUrl").text();
         this.show_title = $(detailData).find("title").text();
-        this.show_fee = $(detailData).find("price").text();
+        this.show_price = $(detailData).find("price").text();
         this.show_phone_number = $(detailData).find("phone").text();
         if ($(detailData).find("placeAddr").text().length > 0) {
           this.show_place = $(detailData).find("placeAddr").text();
@@ -338,7 +335,7 @@ export default {
       if (this.infoMatched == 0) { // 아예 그 장르의 문화 정보가 없는 경우
         msg = "죄송합니다. 선택하신 카테고리에 해당하는 정보가 없습니다.";
       } else {
-        if (this.feeMatched == 1) {
+        if (this.priceMatched == 1) {
           if (this.dateMatched == 1) {
             msg = "선택하신 정보와 딱 맞는 " + this.show_title + " 을 추천해드려요";
           } else {
@@ -403,6 +400,6 @@ export default {
 </script>
 
 <style lang="css">
-@import "../css/ResultMain.css";
+@import "../css/Result.css";
 </style>
 

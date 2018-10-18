@@ -1,7 +1,7 @@
 const state = {
     group : '', // alone, friend, family
     favor : '', // music, art, play, dance
-    fee : '',   // free, pay, nothing
+    price : '',   // free, pay, nothing
     date : '',  // today, tomorrow, week, month
     address : ''
 }
@@ -13,8 +13,8 @@ const getters = {
     getFavor() {
         return state.favor;
     },
-    getFee() {
-        return state.fee;
+    getPrice() {
+        return state.price;
     },
     getDate() {
         return state.date;
@@ -31,8 +31,8 @@ const mutations = {
     setFavor(state, payload) {
         state.favor = payload;
     },
-    setFee(state, payload) {
-        state.fee = payload;
+    setPrice(state, payload) {
+        state.price = payload;
     },
     setDate(state, payload) {
         state.date = payload;

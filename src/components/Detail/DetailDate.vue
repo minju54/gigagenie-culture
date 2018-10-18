@@ -157,7 +157,7 @@ export default {
             gigagenie.voice.onVoiceCommand=function(event){
                 switch(event){
                     case 'prevPage':
-                        self.$router.replace({path: '/detail/Fee'});
+                        self.$router.replace({path: '/detail/price'});
                         console.log('[DetailDate] 이전 페이지');
                         break;
                     case 'nextPage':
@@ -317,7 +317,7 @@ export default {
             //         this.$router.push({path: '/detail/group'});
             //         break;
             //     case 3:
-            //         this.$router.push({path: '/detail/fee'});
+            //         this.$router.push({path: '/detail/price'});
             //         break;
             //     case 4:
             //         this.$router.push({path: '/detail/date'});

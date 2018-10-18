@@ -213,12 +213,12 @@ export default {
                 this.selectIdx = 3;
                 this.$store.commit('setGroup', 'family');
             }
-            this.goDetailFee();
+            this.goDetailPrice();
         },
-        goDetailFee() {
+        goDetailPrice() {
             var self = this;
-            setTimeout(function() {self.$router.push('/detail/fee')}, 1000);
-            // this.$router.push({path: '/detail/fee'});
+            setTimeout(function() {self.$router.push('/detail/price')}, 1000);
+            // this.$router.push({path: '/detail/price'});
         },
         pageMove(id) { // 기가지니할때는 없애기!!
             // switch(id) {
@@ -229,7 +229,7 @@ export default {
             //         this.$router.push({path: '/detail/group'});
             //         break;
             //     case 3:
-            //         this.$router.push({path: '/detail/fee'});
+            //         this.$router.push({path: '/detail/price'});
             //         break;
             //     case 4:
             //         this.$router.push({path: '/detail/date'});

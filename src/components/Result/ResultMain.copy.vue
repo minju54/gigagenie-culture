@@ -24,7 +24,7 @@
                     </div>
                     <div class="row" id="text-content-row">
                         <div class="col-sm-3" id="text-title"><b>요금</b></div>
-                        <div class="col-sm-9" id="text-content">{{ show_fee }}</div>
+                        <div class="col-sm-9" id="text-content">{{ show_price }}</div>
                     </div>
                     <div class="row" id="text-content-row">
                         <div class="col-sm-3" id="text-title"><b>문의</b></div>
@@ -54,13 +54,13 @@ export default {
       show_place: "",
       show_place_detail: "",
       show_date: "",
-      show_fee: "",
+      show_price: "",
       show_phone_number: "",
       show_contents: "",
       show_thumbnail: "",
       userGroup: "",
       userFavor: "",
-      userFee: "",
+      userPrice: "",
       userDate: "",
       dt_start: new Date(),
       dt_end: new Date(),
@@ -80,9 +80,9 @@ export default {
     getRecommandData() {
       this.userGroup = this.$store.getters.getGroup;
       this.userFavor = this.$store.getters.getFavor;
-      this.userFee = this.$store.getters.getFee;
+      this.userPrice= this.$store.getters.getPrice;
       this.userDate = this.$store.getters.getDate;
-      console.log(this.userGroup + ", " + this.userFavor + this.userFee + ", " + this.userDate);
+      console.log(this.userGroup + ", " + this.userFavor + this.userPrice + ", " + this.userDate);
 
       // Favor
       if (this.userFavor === "play") {
@@ -158,9 +158,9 @@ export default {
         // 받아온 리스트 중에서 무료 / 유료 따로 뽑아내기
         for (idx in resArray) {
           var detailData = resArray[idx].data;
-          var feeValue = $(detailData).find("price").text();
+          var priceValue = $(detailData).find("price").text();
           
-          if (this.$store.getters.getFee === "nothing") { // 금액 상관없으면 바로 row[0] 가져오고 break
+          if (this.$store.getters.getPrice === "nothing") { // 금액 상관없으면 바로 row[0] 가져오고 break
             console.log('seqNum: ', $(detailData).find("seq").text());
             break;
           } else {

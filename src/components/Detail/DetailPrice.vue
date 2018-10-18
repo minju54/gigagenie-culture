@@ -12,14 +12,14 @@
             </div>
             <div class="row">
                 <div class="col-sm-4" id="category-col">
-                    <div id="category-content-click" @click="selectFee(1)" v-if="selectIdx===1">
+                    <div id="category-content-click" @click="selectPrice(1)" v-if="selectIdx===1">
                         <img id="num-circle" src="../../assets/numCircle1.png">
                         <div>
                             <img id="category-pic" src="../../assets/fee-no.jpg">
                         </div>
                         <p id="category-text"><b>무료</b></p>
                     </div>
-                    <div id="category-content" @click="selectFee(1)" v-else>
+                    <div id="category-content" @click="selectPrice(1)" v-else>
                         <img id="num-circle" src="../../assets/numCircle1.png">
                         <div>
                             <img id="category-pic" src="../../assets/fee-no.jpg">
@@ -28,14 +28,14 @@
                     </div>
                 </div> 
                 <div class="col-sm-4" id="category-col">
-                    <div id="category-content-click" @click="selectFee(2)" v-if="selectIdx===2">
+                    <div id="category-content-click" @click="selectPrice(2)" v-if="selectIdx===2">
                         <img id="num-circle" src="../../assets/numCircle2.png">
                         <div>
                             <img id="category-pic" src="../../assets/fee-yes.jpg">
                         </div>
                         <p id="category-text"><b>유료</b></p>
                     </div>
-                    <div id="category-content" @click="selectFee(2)" v-else>
+                    <div id="category-content" @click="selectPrice(2)" v-else>
                         <img id="num-circle" src="../../assets/numCircle2.png">
                         <div>
                             <img id="category-pic" src="../../assets/fee-yes.jpg">
@@ -44,14 +44,14 @@
                     </div>
                 </div> 
                 <div class="col-sm-4" id="category-col">
-                    <div id="category-content-click" @click="selectFee(3)" v-if="selectIdx===3">
+                    <div id="category-content-click" @click="selectPrice(3)" v-if="selectIdx===3">
                         <img id="num-circle" src="../../assets/numCircle3.png">
                         <div>
                             <img id="category-pic" src="../../assets/fee-matter.jpg">
                         </div>
                         <p id="category-text"><b>상관없음</b></p>
                     </div>
-                    <div id="category-content" @click="selectFee(3)" v-else>
+                    <div id="category-content" @click="selectPrice(3)" v-else>
                         <img id="num-circle" src="../../assets/numCircle3.png">
                         <div>
                             <img id="category-pic" src="../../assets/fee-matter.jpg">
@@ -92,7 +92,7 @@ export default {
                 if (result_cd === 200) {
 
                 } else {
-                    console.log('[DetailFee] gigagenie init error: '+ result_cd+ ", " + result_msg);
+                    console.log('[DetailPrice] gigagenie init error: '+ result_cd+ ", " + result_msg);
                 }
             });
         },
@@ -104,9 +104,9 @@ export default {
                 if(result_cd===200){
 
                 } else {
-                    console.log("[DetailFee]gigagenie.voice.sendTTS - result_cd:" + result_cd);
-                    console.log("[DetailFee]gigagenie.voice.sendTTS - result_msg:" + result_msg);
-                    console.log("[DetailFee]gigagenie.voice.sendTTS - extra:" + JSON.stringify(extra));
+                    console.log("[DetailPrice]gigagenie.voice.sendTTS - result_cd:" + result_cd);
+                    console.log("[DetailPrice]gigagenie.voice.sendTTS - result_msg:" + result_msg);
+                    console.log("[DetailPrice]gigagenie.voice.sendTTS - extra:" + JSON.stringify(extra));
                 };
             });
         },
@@ -151,18 +151,18 @@ export default {
             var self = this;
             gigagenie.voice.getVoiceText(this.options,function(result_cd,result_msg,extra){
                 if(result_cd===200){
-                    console.log("[DetailFee]Received Text is " + extra.voicetext);
+                    console.log("[DetailPrice]Received Text is " + extra.voicetext);
                     if (extra.voicetext == "1번" || extra.voicetext == "무료") {
-                        self.selectFee(1);
+                        self.selectPrice(1);
                     } else if (extra.voicetext == "2번" || extra.voicetext == "유료") {
-                        self.selectFee(2);
+                        self.selectPrice(2);
                     } else if (extra.voicetext == "3번" || extra.voicetext == "상관없어" || extra.voicetext == "상관없음") {
-                        self.selectFee(3);
+                        self.selectPrice(3);
                     } else {
                         // self.getUserVoice();
                     }
                 } else {
-                    console.log('[DetailFee]getUserVoice err: ' +  result_cd + ": " + result_msg);
+                    console.log('[DetailPrice]getUserVoice err: ' +  result_cd + ": " + result_msg);
                 }; 
             });
         },
@@ -171,28 +171,28 @@ export default {
             gigagenie.voice.onSelectedIndex=function(event){
                 switch(event){
                     case 1:
-                        self.selectFee(1);
+                        self.selectPrice(1);
                         break;
                     case 2:
-                        self.selectFee(2);
+                        self.selectPrice(2);
                         break;
                     case 3:
-                        self.selectFee(3);
+                        self.selectPrice(3);
                     default:
                         break;
                 };
             }
         },
-        selectFee(id) {
+        selectPrice(id) {
             if (id == 1) {
                 this.selectIdx = 1;
-                this.$store.commit('setFee', 'free');
+                this.$store.commit('setPrice', 'free');
             } else if (id == 2) {
                 this.selectIdx = 2;
-                this.$store.commit('setFee', 'pay');
+                this.$store.commit('setPrice', 'pay');
             } else {
                 this.selectIdx = 3;
-                this.$store.commit('setFee', 'nothing');
+                this.$store.commit('setPrice', 'nothing');
             }
             this.goDetailDate();
         },
@@ -202,13 +202,13 @@ export default {
                 switch(event){
                     case 'prevPage':
                         self.$router.replace({path: '/detail/Date'});
-                        console.log('[DetailFee] 이전 페이지');
+                        console.log('[DetailPrice] 이전 페이지');
                         break;
                     case 'nextPage':
                         if (self.selectIdx === 0) {
                             self.sendTTS("요금을 먼저 선택해주세요");
                         } 
-                        console.log('[DetailFee] 다음 페이지');
+                        console.log('[DetailPrice] 다음 페이지');
                         break;
                     default:
                         break;
@@ -229,7 +229,7 @@ export default {
             //         this.$router.push({path: '/detail/group'});
             //         break;
             //     case 3:
-            //         this.$router.push({path: '/detail/fee'});
+            //         this.$router.push({path: '/detail/price'});
             //         break;
             //     case 4:
             //         this.$router.push({path: '/detail/date'});
