@@ -1,0 +1,130 @@
+#div-result {
+    padding-left: 255px;
+    padding-right: 255px;
+}
+
+#result-text {
+    color: #ffffff;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    padding-left: 37px;
+    padding-right: 30px;
+    text-align: left;
+    font-size: 25px;
+    font-weight: bold;
+    /* border : 8px rgb(221, 182, 83) solid; */
+    background: rgba(221, 182, 83, 0.8);
+    border-radius: 10px;
+    width: 160px;
+}
+
+#result-body {
+    border-radius: 20px;
+    background: transparent; 
+    background-color: rgba(0, 0, 0, 0.5); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); 
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )"; 
+    zoom: 1;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    margin-top: 20px;
+    height: 584px;
+}
+
+#no-result-body {
+    height: 665px;
+}
+
+#thumbnail {
+    width: 300px;
+    height: 390px;
+    border-radius: 10px;
+}
+
+#no-result-text-top {
+    color: #ffffff;
+    font-size: 25px;
+    padding-top: 50px;
+}
+
+#no-result-text-bottom {
+    color: #ffffff;
+    font-size: 25px;
+}
+
+#not-found {
+    width: 100px;
+    height: 100px;
+    margin-top: 150px;
+}
+
+#text-content-row {
+    margin-bottom: 10px;
+}
+
+#text-title {
+    color:  rgb(221, 182, 83);
+    font-size: 22px;
+    text-align: center;
+}
+
+#text-content {
+    text-align: left;
+    font-size: 23px;
+    padding-left: 10px;
+}
+
+#text-content-show {
+    display: inline-block;
+    width: 863px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    text-align: left;
+    font-size: 20px;
+    margin-left: 70px;
+    height: 224px;
+}
+
+#text-detail {
+    text-align: left;
+    font-size: 22px;
+    margin-left: 40px;
+    padding-left: 40px;
+    margin-bottom: 10px;
+    color:  rgb(221, 182, 83);
+    border : 3px rgb(221, 182, 83) solid;
+    border-radius: 20px;
+    width: 155px;
+}
+#show-title {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 25px;
+}
+
+#div-left {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#btn-bookmark {
+    background-color: rgb(221, 182, 83);
+    border: none;
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    text-align: center;
+    font-size: 17px;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    /* position:relative; */
+    /* background-image:url(../../assets/star.png);
+    background-repeat:no-repeat;
+    margin-left: -40px; */
+}
