@@ -14,7 +14,7 @@ export default {
         mainTop: MainTop,
         mainFooter: MainFooter
     },
-    create() {
+    created() {
         // eventBus.$on('group', function(data) {
         //     console.log("group data : ", data);
         // });

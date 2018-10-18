@@ -51,7 +51,7 @@ export default {
             gigagenie.voice.onVoiceCommand=function(event){
                 switch(event){
                     case 'prevPage':
-                        self.$router.replace({path: '/'});
+                        // self.$router.replace({path: '/'});
                         console.log('[MainCategory] 이전 페이지');
                         break;
                     case 'nextPage':

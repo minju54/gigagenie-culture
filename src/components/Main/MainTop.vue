@@ -13,16 +13,16 @@
 
 <script>
 export default {
-    data() {
-        return {
+    // data() {
+    //     return {
 
-        }
-    },
-    method: {
-        getCategory() {
+    //     }
+    // },
+    // method: {
+    //     getCategory() {
             
-        }
-    }
+    //     }
+    // }
 }
 </script>
 

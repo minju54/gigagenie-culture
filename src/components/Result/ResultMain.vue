@@ -9,8 +9,8 @@
                     <h3 id="show-title"> {{ show_title }}</h3>
                     <img v-bind:src="show_thumbnail"  id="thumbnail"/>
                     <br>
-                    <button id="btn-bookmark">
-                        <img src="../../assets/star.png" @click="setBookmark()"> 북마크</button>
+                    <button id="btn-bookmark-active" @click="setBookmark()">
+                        <img src="../../assets/star.png" > 북마크</button>
                 </div>
                 <div class="col-sm-8" id="rect-round-grey-large">
                   <br>

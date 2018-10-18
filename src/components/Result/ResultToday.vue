@@ -8,8 +8,8 @@
                     <h3 id="show-title"> {{ show_title }}</h3>
                     <img v-bind:src="show_thumbnail"  id="thumbnail"/>
                     <br>
-                    <button id="btn-bookmark">
-                        <img src="../../assets/star.png" @click="setBookmark()"> 북마크</button>
+                    <button id="btn-bookmark-active" v-if="bookmarkState==0" @click="setBookMark()"><img src="../../assets/star.png" > 북마크</button>
+                    <button id="btn-bookmark" v-else @click="setBookMark()"><img src="../../assets/star.png" > 북마크</button>
                 </div>
                 <div class="col-sm-8" id="rect-round-grey-large">
                   <br>
@@ -57,6 +57,7 @@ export default {
             options: {},
             info_text: "오늘의 추천 문화입니다.",
             infoMatched : 1,
+            show_seqNum: "",
             show_title: "",
             show_place: "",
             show_place_detail: "",
@@ -65,12 +66,12 @@ export default {
             show_phone_number: "",
             show_contents: "",
             show_thumbnail: "",
-            dt_today: new Date()
+            dt_today: new Date(),
+            bookmarkState: '' // 0안함, 1함
         }
     },
     created() {
         this.init();
-        this.sendTTS();
         this.getRecommandData();
         this.getVoiceCommand();
         this.exitApp();
@@ -89,8 +90,22 @@ export default {
             gigagenie.init(this.options, function(result_cd, result_msg, extra) {
                 if (result_cd === 200) {
                     self.sendTTS(self.info_text);
+                    self.getBookMarkState();
+                    // self.deleteTestBookmark();
                 } else {
                     console.log('[ResultToday] gigagenie init error: '+ result_cd+ ", " + result_msg);
+                }
+            });
+        },
+        deleteTestBookmark() {
+            this.options={};
+            this.options.namespace='bookmark';
+            this.options.key='info';
+            gigagenie.appdata.delKeyData(this.options,function(result_cd,result_msg,extra){
+                if(result_cd===200){
+                    console.log("[ResultToday] Bookmark delete success");
+                } else {
+                    console.log("[ResultToday] Bookmark delete Error "+ result_cd + " : " + result_msg);
                 }
             });
         },
@@ -174,25 +189,27 @@ export default {
                     var self = this;
                     var seqArray = new Array();
                     $(res).find("msgBody").find("perforList").each(function(index){
-                        var seqNum = $(this).find("seq").text();
-                        console.log('[ResultToday]seqNum: ', seqNum);
+                        this.show_seqNum = $(this).find("seq").text();
                         if ($(this).find("area").text() == userAddress) {
-                            self.getDetailData(seqNum);
+                            console.log('[ResultToday]show_seqNum:', this.show_seqNum);
+                            self.getDetailData(this.show_seqNum);
                             return false; // 하나 찾고 loop 중지
-                        } 
+                        } else {
+                            console.log('[ResultToday] false: ', $(this).find("area").text());
+                        }
                     }); 
                 },
                 error: err => console.log('[ResultToday]getRecommandData err', err)
             });
         },
-        getDetailData(seqNum) {
+        getDetailData(seq) {
+            var self = this;
             $.ajax({
-                url: `${this.$store.getters.getBaseURI}/d/?ServiceKey=${this.$store.getters.getServiceKey}&seq=${seqNum}`,
+                url: `${this.$store.getters.getBaseURI}/d/?ServiceKey=${this.$store.getters.getServiceKey}&seq=${seq}`,
                 type: "GET",
                 dataType: "xml",
                 async: false,
                 success: res => {
-                    // var detailData = $(res).find("msgBody").find("perforInfo");
                     this.show_title = $(res).find("title").text();
                     this.show_thumbnail = $(res).find("imgUrl").text();
                     this.show_place = $(res).find("placeAddr").text();
@@ -225,6 +242,112 @@ export default {
                     }
                 },
                 error: err => console.log('[ResultToday]getRecommandData err', err)
+            });
+        },
+        getBookMarkState() { // 사용자가 이미 북마크한 정보인지 알아본다.
+            var self = this;
+            this.options = {};
+            this.options.namespace = 'bookmark';
+            this.options.key='info';
+            gigagenie.appdata.getKeyData(this.options,function(result_cd,result_msg,extra){
+                switch(result_cd) {
+                    case 200:
+                        var bookmarkList = JSON.parse(extra.data);
+                        console.log('[ResultToday] bookmarkList: ' + JSON.stringify(bookmarkList));
+                       
+                        // for(var key in bookmarkList["list"]) {
+                        //     console.log("key: " + key + ", bookmarkList[key]: " + bookmarkList[key]);
+                        // }
+                        $.each(bookmarkList, function(index, row) {
+                            console.log('bookmarkList[index].seq: '+  bookmarkList[index].seq + ", show_seqNum: " + self.show_seqNum);
+                            if (bookmarkList[index].seq === this.show_seqNum) {
+                                console.log('[ResultToday] 북마크에 있음!!');
+                                self.bookmarkState = 1;
+                            } else {
+                                console.log('[ResultToday] 북마크에 없음');
+                                self.bookmarkState = 0;
+                            }
+                        });
+                        console.log("[ResultToday]getKeyData success, " + self.options.key + " : " + extra.data);
+                        break;
+                    case 403:
+                        self.bookmarkState = 0;
+                        console.log("[ResultToday]bookmark namespace가 존재하지않음");
+                        break;
+                    case 404:
+                        self.bookmarkState = 0;
+                        console.log("[ResultToday]seq키가 존재하지않음");
+                        break;
+                    case 500:
+                        self.bookmarkState = 0;
+                        console.log("[ResultToday]system error");
+                        break;
+                    default:
+                        self.bookmarkState = 0;
+                        console.log('[ResultToday]code: '+ result_cd+ ", msg: "+result_msg);
+                        break;
+                }
+            });      
+        },
+        setBookMark() {
+            var self = this;
+            this.options = {};
+            this.options.namespace = 'bookmark';
+            this.options.key = 'info';
+            
+            if (this.bookmarkState == 1) { // 북마크가 이미 된 경우 -> 클릭하면 북마크 해제
+                // key info 에 대한 data를 다시 설정해 줘야 한다.
+
+
+
+                gigagenie.appdata.setKeyData(this.options,function(result_cd,result_msg,extra){
+                    if(result_cd===200){
+                        self.bookmarkState = 1;
+                        console.log('[ResultToday]북마크 성공! extra: ', extra);
+                    } else {
+                        console.log("[ResultToday]북마크 실패");
+                    }
+                });
+            } else { // 북마크 안되어 있음 -> 클릭하면 북마크 하기!
+                // 북마크에 추가할 내용
+                this.options.data = JSON.stringify(
+                    {list:[
+                        {   seq:this.show_seqNum, 
+                            title:this.show_title, 
+                            thumbnail:this.show_thumbnail, 
+                            date:this.show_date, 
+                            place:this.show_place, 
+                            price:this.show_price, 
+                            phone:this.show_phone_number
+                        }
+                    ]});
+
+                gigagenie.appdata.setKeyData(this.options,function(result_cd,result_msg,extra){
+                    if(result_cd===200){
+                        self.bookmarkState = 1;
+                        console.log('[ResultToday]북마크 성공! result_msg: ' + result_msg + ", extra.data: " + extra);
+                    } else {
+                        console.log("[ResultToday]북마크 실패");
+                    }
+                });
+            }
+            
+
+           
+        },
+        makeNamespace() {
+            // 사용자 namespace 설정
+            this.options = {};
+            this.options.namespace = 'bookmark';
+            this.options.shareflag = 'N';
+            gigagenie.appdata.createNameSpace(this.options,function(result_cd,result_msg,extra){
+                if(result_cd===200){
+                    console.log("[ResultToday]Namespace Bookmark creation is success.");
+                } else if (result_cd===409){
+                    console.log("[ResultToday]Namespace Bookmark creation already exist.");
+                } else {
+                    console.log("[ResultToday]Namespace Bookmark creation is fail.");
+                }
             });
         }
     }

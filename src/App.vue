@@ -13,9 +13,6 @@
 import Home from './components/Home.vue';
 export default {
   name: "App",
-  created() {
-    // this.init();
-  },
   data() {
     return {
       options: null

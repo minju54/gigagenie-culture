@@ -113,35 +113,50 @@ export default {
             var self = this;
             // setTimeout(function() {self.$router.push('/detail/favor')}, 2000);
             setTimeout(function() {self.$router.push('/mainCategory')}, 2000);
-            self.getUserAddress();
+            self.getUserSetting();
         },
-        getUserAddress() {
+        getUserSetting() {
+            // 사용자 주소 설정
             var address = '';
             var self = this;
             gigagenie.appinfo.getAddress(null,function(result_cd,result_msg,extra){
                 if(result_cd===200){
                     address = extra.address.substr(0,2);
-                    console.log("GiGA Genie Home Address= " + address);
+                    console.log("[MainContent]GiGA Genie Home Address= " + address);
                 } else if(result_cd===404){
-                    console.log("Address is not found");
+                    console.log("[MainContent]Address is not found");
                 } else {
-                    console.log("Getting Home Address fail.");
+                    console.log("[MainContent]Getting Home Address fail.");
                 }
                 if (address == "") {
                     address = '서울'; // 기본값 서울
                 }
                 self.$store.commit('setAddress', address);
             });
+
+            // 사용자 namespace 설정
+            this.options = {};
+            this.options.namespace = 'bookmark';
+            this.options.shareflag = 'N';
+            gigagenie.appdata.createNameSpace(this.options,function(result_cd,result_msg,extra){
+                if(result_cd===200){
+                    console.log("[MainContent]Namespace Bookmark creation is success.");
+                } else if (result_cd===409){
+                    console.log("[MainContent]Namespace Bookmark creation already exist.");
+                } else {
+                    console.log("[MainContent]Namespace Bookmark creation is fail.");
+                }
+            });
         },
-        exitApp() { // 종료하기가 안돼!!!!!!!!!ㅠㅠㅠㅠ
+        exitApp() { 
             console.log('exitAPP');
             // 음성종료, 리모컨 나가기 키 클릭
             var self = this;
             gigagenie.voice.onRequestClose=function(){
-                console.log('exitAPP onRequestClose');
+                console.log('[MainContent]exitAPP onRequestClose');
                 var options={};
                 gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
-                    console.log('exitAPP svcFinished');
+                    console.log('[MainContent]exitAPP svcFinished');
                     self.stopTTS();
                 });
             };
