@@ -68,13 +68,11 @@ export default {
             show_thumbnail: "",
             dt_today: new Date(),
             bookmarkState: '', // -1안함, 1함
-            infoMatched : 1,
             bookmarkListJson: ''
         }
     },
     created() {
         this.init();
-        
         this.getVoiceCommand();
         this.exitApp();
     },
@@ -91,7 +89,7 @@ export default {
             var self = this;
             gigagenie.init(this.options, function(result_cd, result_msg, extra) {
                 if (result_cd === 200) {
-                    self.sendTTS(self.info_text);
+                   
                     self.getRecommandData();
                     // self.deleteTestBookmark();
                 } else {
@@ -153,10 +151,19 @@ export default {
                 }
             });
         },
-        sendTTS(msg) {
-            this.options = {};
-            this.options.ttstext = msg;
+        sendTTS(type) {
             var self = this;
+            this.options = {};
+            var msg = '';
+            if (type === 1) {
+                this.options.ttstext = this.info_text + " " + this.show_title + " 는 어떠세요?";
+            } else {
+                this.options.ttstext = "죄송합니다. 오늘 해당하는 전시가 없습니다.";
+            }
+            
+            // this.options.ttstext = "테스트";
+            
+            
             gigagenie.voice.sendTTS(this.options, function(result_cd, result_msg, extra) {
                 if(result_cd===200){
 
@@ -186,7 +193,8 @@ export default {
             console.log('[ResultToday]userAddress: ' + userAddress);
             // 오늘 하는 문화 정보 찾기
             $.ajax({
-                url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=${this.dt_today}&to=${this.dt_end}&sortStdr=3`,
+                //url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=${this.dt_today}&to=${this.dt_today}&sortStdr=3`,
+                url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=20181024&to=20181024&sortStdr=1`,
                 type: "GET",
                 dataType: "xml",
                 async: false,
@@ -198,6 +206,7 @@ export default {
                             self.show_seqNum = $(this).find("seq").text();
                             console.log('[ResultToday]show_seqNum:', self.show_seqNum);
                             self.getDetailData(self.show_seqNum);
+                            self.infoMatched = 1;
                             return false; // 하나 찾고 loop 중지
                         } else {
                             self.infoMatched = 0;
@@ -208,6 +217,7 @@ export default {
                 error: err => console.log('[ResultToday]getRecommandData err', err)
             });
             this.getBookMarkState();
+            this.sendTTS(this.infoMatched);
         },
         getDetailData(seq) {
             var self = this;
@@ -219,7 +229,11 @@ export default {
                 success: res => {
                     this.show_title = $(res).find("title").text();
                     this.show_thumbnail = $(res).find("imgUrl").text();
-                    this.show_place = $(res).find("placeAddr").text();
+                    if ($(res).find("placeAddr").text() > 0) {
+                        this.show_place = $(res).find("placeAddr").text();
+                    } else {
+                        this.show_place = $(res).find("place").text();
+                    }
                     this.show_price = $(res).find("price").text();
                     this.show_phone_number = $(res).find("phone").text();
                     // (날짜)
@@ -250,6 +264,8 @@ export default {
                 },
                 error: err => console.log('[ResultToday]getRecommandData err', err)
             });
+            
+
         },
         getBookMarkState() { // 사용자가 이미 북마크한 정보인지 알아본다.
             var self = this;
@@ -325,16 +341,17 @@ export default {
                 });
             } else { // 북마크 안되어 있음 -> 클릭하면 북마크 하기!
                 // 북마크에 추가할 내용
-                this.options.data = JSON.stringify(
-                    [{   seq:this.show_seqNum, 
+                var newData = 
+                    {   seq:this.show_seqNum, 
                         title:this.show_title, 
                         thumbnail:this.show_thumbnail, 
                         date:this.show_date, 
                         place:this.show_place, 
                         price:this.show_price, 
                         phone:this.show_phone_number
-                    }]
-                );
+                    };
+                this.bookmarkListJson.push(newData);
+                this.options.data = JSON.stringify(this.bookmarkListJson);
                 this.setBookmarkData(this.options);
             }
         },

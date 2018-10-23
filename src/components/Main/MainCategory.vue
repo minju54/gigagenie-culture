@@ -159,6 +159,7 @@ export default {
                     setTimeout(function() {self.$router.push('/detail/favor')}, 1000);
                     break;
                 case 3:
+                    setTimeout(function() {self.$router.push('/bookmarkMain')}, 1000);
                     break;
                 default:
                     break;

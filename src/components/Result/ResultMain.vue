@@ -9,8 +9,8 @@
                     <h3 id="show-title"> {{ show_title }}</h3>
                     <img v-bind:src="show_thumbnail"  id="thumbnail"/>
                     <br>
-                    <button id="btn-bookmark-active" @click="setBookmark()">
-                        <img src="../../assets/star.png" > 북마크</button>
+                    <button id="btn-bookmark-active" v-if="bookmarkState == -1" @click="checkBookMarkState()"><img src="../../assets/star.png" > 북마크</button>
+                    <button id="btn-bookmark" v-else @click="checkBookMarkState()"><img src="../../assets/star.png" > 북마크</button>
                 </div>
                 <div class="col-sm-8" id="rect-round-grey-large">
                   <br>
@@ -79,7 +79,9 @@ export default {
       dateMatched : 1, 
       priceMatched : 0, // true : 1, false : 0
       infoMatched : 1, // 해당 정보가 아예 없는 경우 : 0
-      retry : 0 // 탐색 한번만 할 수 있게 함
+      retry : 0, // 탐색 한번만 할 수 있게 함,
+      bookmarkState: '', // -1안함, 1함
+      bookmarkListJson: ''
     };
   },
   created() {
@@ -250,7 +252,7 @@ export default {
       var detailList = [];
       var idx;
       for (idx in seqArray) {
-        console.log('seqArray: ' + seqArray[idx]);
+        //console.log('seqArray: ' + seqArray[idx]);
         detailList.push(axios.get(`${this.$store.getters.getBaseURI}/d/?ServiceKey=${this.$store.getters.getServiceKey}&seq=${seqArray[idx]}`));
       }
 
@@ -284,6 +286,8 @@ export default {
         } // end of for
         
         // 화면에 데이터 뿌리기 (썸네일, 타이틀, 가격, 문의, 장소)
+        this.showSeqNum = $(detailData).find("seq").text();
+        console.log('[ResultMain]seqNum: ', this.showSeqNum);
         this.show_thumbnail = $(detailData).find("imgUrl").text();
         this.show_title = $(detailData).find("title").text();
         this.show_price = $(detailData).find("price").text();
@@ -319,7 +323,8 @@ export default {
           this.show_contents = origin_content;
         }
         // this.sendTTS(msg);
-        makeInfoMsg();
+        this.makeInfoMsg();
+        this.getBookMarkState();
       })).catch((err) => {
         console.log('axios err: ', err);
       });
@@ -375,25 +380,122 @@ export default {
         }
       });
     }, 
-    test() {
-      var datas = {};
-      // datas[0] = this.showSeqNum;
-      datas[0] = 1;
-      datas[1] = this.show_title;
-      datas[2] = this.show_thumbnail;
-      datas[3] = this.show_date;
-
+    deleteTestBookmark() {
       this.options={};
       this.options.namespace='bookmark';
-      this.options.key="index1";
-      this.options.data=datas;
-      gigagenie.appdata.setKeyData(this.options,function(result_cd,result_msg,extra){
+      this.options.key='info';
+      gigagenie.appdata.delKeyData(this.options,function(result_cd,result_msg,extra){
           if(result_cd===200){
-              console.log(options.key + ":" + extra.data + " is set");
+              console.log("[ResultMain] Bookmark delete success");
           } else {
-              console.log("Error");
+              console.log("[ResultMain] Bookmark delete Error "+ result_cd + " : " + result_msg);
           }
       });
+    },
+    checkBookMarkState() {
+      var self = this;
+      this.options = {};
+      this.options.namespace = 'bookmark';
+      this.options.key = 'info';
+      
+      if (this.bookmarkState == 1) { // 북마크가 이미 된 경우 -> 클릭하면 북마크 해제
+        // 북마크 취소할 데이터를 빼고 다시 json 데이터를 만듬
+        console.log('delete bf) bookmarkListJson: ' + this.bookmarkListJson );
+        $.each(this.bookmarkListJson, function (index, data) {
+          if (data.seq === self.showSeqNum) {
+              self.bookmarkListJson.splice(index, 1);
+          } 
+        });
+        console.log('delete af) bookmarkListJson: ' + this.bookmarkListJson );
+
+        // 전체 북마크 데이터 삭제
+        this.options={};
+        this.options.namespace='bookmark';
+        this.options.key='info';
+        gigagenie.appdata.delKeyData(this.options,function(result_cd,result_msg,extra){
+          if(result_cd===200){
+              console.log("[ResultMain] Bookmark delete success");
+              // 정제한 JSON데이터로 다시 북마크 저장
+              self.options.data = JSON.stringify(self.bookmarkListJson);
+              self.setBookmarkData(self.options);
+          } else {
+              console.log("[ResultMain] Bookmark delete Error "+ result_cd + " : " + result_msg);
+          }
+        });
+      } else { // 북마크 안되어 있음 -> 클릭하면 북마크 하기!
+        // 북마크에 추가할 내용
+        var newData = 
+          {   seq:this.showSeqNum, 
+              title:this.show_title, 
+              thumbnail:this.show_thumbnail, 
+              date:this.show_date, 
+              place:this.show_place, 
+              price:this.show_price, 
+              phone:this.show_phone_number
+          };
+        this.bookmarkListJson.push(newData);
+        this.options.data = JSON.stringify(this.bookmarkListJson);
+        this.setBookmarkData(this.options);
+      }
+    },
+    setBookmarkData(options) {
+      var self = this;
+      gigagenie.appdata.setKeyData(options,function(result_cd,result_msg,extra){
+        if(result_cd===200){
+            self.bookmarkState *= -1;
+            console.log('[ResultMain]북마크 성공! state: ' + self.bookmarkState);
+            var msg = '';
+            if (self.bookmarkState == 1) {
+              msg = "북마크에 저장했습니다.";
+            } else {
+              msg = "북마크에서 해제했습니다.";
+            }
+            self.sendTTS(msg);
+        } else {
+            console.log("[ResultMain]북마크 실패");
+        }
+      });
+    },
+    getBookMarkState() { // 사용자가 이미 북마크한 정보인지 알아본다.
+      console.log('getBookMarkState enter!!!! ' );
+      var self = this;
+      this.options = {};
+      this.options.namespace = 'bookmark';
+      this.options.key='info';
+                      
+      gigagenie.appdata.getKeyData(this.options,function(result_cd,result_msg,extra){
+        switch(result_cd) {
+          case 200:
+            self.bookmarkListJson = JSON.parse(extra.data);
+            $.each(self.bookmarkListJson, function (index, data) {
+                if (data.seq === self.showSeqNum) {
+                    console.log('[ResultMain] 북마크에 있음!!');
+                    self.bookmarkState = 1;
+                } else {
+                    console.log('[ResultMain] 북마크에 없음');
+                    self.bookmarkState = -1;
+                }
+            })
+            console.log("[ResultMain]getKeyData success, " + self.options.key + " --> " + extra.data);
+            break;
+          case 403:
+            self.bookmarkState = -1;
+            console.log("[ResultMain]bookmark namespace가 존재하지않음");
+            break;
+          case 404:
+            self.bookmarkState = -1;
+            console.log("[ResultMain]seq키가 존재하지않음");
+            break;
+          case 500:
+            self.bookmarkState = -1;
+            console.log("[ResultMain]system error");
+            break;
+          default:
+            self.bookmarkState = -1;
+            console.log('[ResultMain]code: '+ result_cd+ ", msg: "+result_msg);
+            break;
+        }
+      });     
     }
   }
 };

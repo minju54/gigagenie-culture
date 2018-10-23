@@ -9,7 +9,7 @@ import DetailGroup from '../components/Detail/DetailGroup.vue'
 import DetailDate from '../components/Detail/DetailDate.vue'
 import ResultMain from '../components/Result/ResultMain.vue'
 import ResultToday from '../components/Result/ResultToday.vue'
-import BookmarkMain from '../components/Bookmark/bookmarkMain.vue'
+import BookmarkMain from '../components/Bookmark/BookmarkMain.vue'
 import NotFound from '../components/NotFound.vue'
 
 // 뷰 어플리케이션에 라우터 플러그인을 추가
