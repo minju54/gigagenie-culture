@@ -62,22 +62,11 @@ export default {
             default: 3
         }
     },
-    created() {
-        gigagenie.voice.onActionEvent=function(extra){
-            console.log('[PaginatedList]발화 문장: ' + extra.uword + " " + extra.actioncode);
-            switch(extra.actioncode){   
-                case 'AddBookmark':
-                    self.sendTTS("북마크에 이미 추가되었습니다.");
-                    break;
-                case 'DeleteBookmark':
-                    self.sendTTS("북마크에서 삭제했습니다.");
-                    idx = extra.parameter['NE-B-Ordinal'];
-                    deleteBookmark(idx);
-                    break;
-                default:
-                    break;
-            }
-        }
+    updated() {
+        this.init();
+    },
+    watch: {
+        // listArray, pageSize 바껴야함
     },
     methods: {
         nextPage () {
@@ -86,11 +75,70 @@ export default {
         prevPage () {
             this.pageNum -= 1;
         },
+        init() {
+            this.options.appid = this.$store.getters.getAppId;
+            this.options.keytype = this.$store.getters.getKeyType;
+            this.options.apikey = this.$store.getters.getAPIKey;
+            
+            var self = this;
+            gigagenie.init(this.options, function(result_cd, result_msg, extra) {
+                if (result_cd === 200) {
+                    self.voiceSelectMode();
+                } else {
+                    console.log('[PaginatedList] gigagenie init error: '+ result_cd+ ", " + result_msg);
+                }
+            });
+        },
+        voiceSelectMode() {
+            var self = this;
+            gigagenie.voice.onActionEvent=function(extra){
+            console.log('[PaginatedList]발화 문장: ' + extra.uword + " " + extra.actioncode);
+            switch(extra.actioncode){   
+                case 'AddBookmark':
+                    self.sendTTS("북마크에 이미 추가되었습니다.");
+                    break;
+                case 'DeleteBookmark':
+                    
+                    var idx = '';
+                    idx = extra.parameter['NE-B-Ordinal'].toString();
+                    idx = idx.replace("번", "");
+                    if (isNaN(idx) == true) { // 문자
+                        if (idx == "일") {
+                            idx = 1;
+                        } else if (idx == "이") {
+                            idx = 2;
+                        } else if (idx == "삼") {
+                            idx = 3;
+                        }
+                    } 
+                    idx -= 1; // index는 0부터 시작
+                    self.deleteBookmark(idx);
+                    break;
+                default:
+                    break;
+                }
+            }
+        },
+        sendTTS(msg) {
+            var self = this;
+            this.options = {};
+            this.options.ttstext = msg;
+
+            gigagenie.voice.sendTTS(this.options, function(result_cd, result_msg, extra) {
+                if(result_cd===200){
+
+                } else {
+                    //extra.reason 에 voice 오류 전달.
+                    console.log("[PaginatedList]gigagenie.voice.sendTTS - result_cd:" + result_cd + " " + result_msg);
+                    console.log("[PaginatedList]gigagenie.voice.sendTTS - extra:" + JSON.stringify(extra));
+                };
+            });
+        },
         deleteBookmark(idx) {
+            idx *= 1; // string to number
             idx = this.pageNum * 3 + idx;
-            console.log('[PaginatedList] delete bf) listArray: ' + this.listArray);
+            console.log('[PaginatedList]idx: ' + idx);
             this.listArray.splice(idx, 1);
-            console.log('[PaginatedList] delete af) listArray: ' + this.listArray);
 
             // 전체 북마크 데이터 삭제
             var self = this;
@@ -99,10 +147,10 @@ export default {
             this.options.key='info';
             gigagenie.appdata.delKeyData(this.options,function(result_cd,result_msg,extra){
                 if(result_cd===200){
-                    console.log("[PaginatedList] Bookmark delete success");
                     // 정제한 JSON데이터로 다시 북마크 저장
                     self.options.data = JSON.stringify(self.listArray);
                     self.setBookmarkData(self.options);
+                    self.sendTTS("북마크에서 삭제했습니다.");
                 } else {
                     console.log("[PaginatedList] Bookmark delete Error "+ result_cd + " : " + result_msg);
                 }

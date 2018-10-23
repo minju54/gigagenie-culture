@@ -112,6 +112,16 @@ export default {
                 }
             };
 
+            // this.options.mode = 2;
+            // this.options.timeout = 30;
+            // gigagenie.voice.getVoiceText(this.options,function(result_cd,result_msg,extra){
+            //     if(result_cd===200){
+            //         console.log("[ResultToday] Received Text is "+extra.voicetext);
+            //     } else if (result_cd === 500) { //  timeout난 경우
+            //         console.log("[ResultToday] timeout");
+            //     }
+            // });
+
             gigagenie.voice.onActionEvent=function(extra){
                 console.log('[ResultToday]발화 문장: ' + extra.uword + " " + extra.actioncode);
                 switch(extra.actioncode){   
@@ -181,9 +191,6 @@ export default {
                 day = "0" + day;
             }
             this.dt_today = year.concat(month, day);
-            //################ 테스트를 위해서 dt_end만듬.....원래는 dt_today만필요!!!
-            // url에서 나중에 dt_end --> dt_today로 바꿔주기 
-            var dt_end = year.concat(month, day);
             var userAddress = this.$store.getters.getAddress;
             if (userAddress == "" ) {
                 userAddress = '서울';
@@ -191,8 +198,8 @@ export default {
             console.log('[ResultToday]userAddress: ' + userAddress);
             // 오늘 하는 문화 정보 찾기
             $.ajax({
-                //url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=${this.dt_today}&to=${this.dt_today}&sortStdr=3`,
-                url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=20181024&to=20181024&sortStdr=1`,
+                url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=${this.dt_today}&to=${this.dt_today}&sortStdr=3`,
+                //url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=20181024&to=20181024&sortStdr=1`,
                 type: "GET",
                 dataType: "xml",
                 async: false,
@@ -215,12 +222,6 @@ export default {
                 error: err => console.log('[ResultToday]getRecommandData err', err)
             });
             this.getBookMarkState();
-            if (this.infoMatched === 1) {
-                this.msg = this.info_text + " " + this.show_title + " 는 어떠세요?";
-            } else {
-                this.msg = "죄송합니다. 오늘 해당하는 전시가 없습니다.";
-            }
-            this.sendTTS(this.msg);
         },
         getDetailData(seq) {
             var self = this;
@@ -267,8 +268,6 @@ export default {
                 },
                 error: err => console.log('[ResultToday]getRecommandData err', err)
             });
-            
-
         },
         getBookMarkState() { // 사용자가 이미 북마크한 정보인지 알아본다.
             var self = this;
@@ -307,6 +306,12 @@ export default {
                         console.log('[ResultToday]code: '+ result_cd+ ", msg: "+result_msg);
                         break;
                 }
+                if (self.infoMatched === 1) {
+                    self.msg = self.info_text + " " + self.show_title + " 는 어떠세요?";
+                } else {
+                    self.msg = "죄송합니다. 오늘 해당하는 전시가 없습니다.";
+                }
+                self.sendTTS(self.msg);
             });      
         },
         checkBookMarkState() {

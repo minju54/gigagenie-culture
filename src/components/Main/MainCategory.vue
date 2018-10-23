@@ -112,6 +112,22 @@ export default {
                 }
             };
 
+            // 여기 안된다~~~~~
+            gigagenie.media.onRemoteKeyEvent=function(extra){
+                console.log('[MainCategory] remote .key: ' + extra.key);
+                switch(extra.key) {
+                    case '49': // 1
+                        self.pageMove(1);
+                        break;
+                    case '50':
+                        self.pageMove(2);   
+                        break;
+                    case '51':
+                        self.pageMove(3);
+                        break;
+                }
+            };
+
             this.options={};
             this.options.voicemsg= this.info_text;
             gigagenie.voice.getVoiceText(this.options,function(result_cd,result_msg,extra){
@@ -135,25 +151,6 @@ export default {
                     self.stopTTS();
                 });
             };
-
-            this.options={};
-            this.options.voicemsg= this.info_text;
-            gigagenie.voice.getVoiceText(this.options,function(result_cd,result_msg,extra){
-                if(result_cd===200){
-                    console.log("[MainCategory]Received Text is " + extra.voicetext);
-                    if (extra.voicetext == "1번") {
-                        self.pageMove(1);
-                    } else if (extra.voicetext == "2번") {
-                        self.pageMove(2);
-                    } else if (extra.voicetext == "3번") {
-                        self.pageMove(3);
-                    } else {
-                        //self.getUserVoice();
-                    }
-                } else {
-                    console.log('[MainCategory]getUserVoice err: ' +  result_cd + ": " + result_msg);
-                }; 
-            });
 
             gigagenie.voice.onSelectedIndex=function(event){
                 switch(event){

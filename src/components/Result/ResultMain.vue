@@ -87,8 +87,6 @@ export default {
   created() {
     this.init();
     this.getRecommandData();
-    this.getVoiceCommand();
-    this.exitApp();
   },
   components: {
     mainTop: MainTop,
@@ -103,22 +101,60 @@ export default {
       var self = this;
       gigagenie.init(this.options, function(result_cd, result_msg, extra) {
           if (result_cd === 200) {
-
+              self.voiceSelectMode();
           } else {
               console.log('gigagenie init error: '+ result_cd+ ", " + result_msg);
           }
       });
     },
-    exitApp() {
-            // 음성종료, 리모컨 나가기 키 클릭
-            var self = this;
-            gigagenie.voice.onRequestClose=function(){
-                var options={};
-                gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
-                    this.stopTTS();
-                });
-            };
-    }, 
+    voiceSelectMode() {
+      var self = this;
+        gigagenie.voice.onVoiceCommand=function(event){
+          switch(event){
+            case 'prevPage':
+              self.$router.replace({path: '/detail/date'});
+              console.log('[ResultMain] 이전 페이지');
+              break;
+            case 'nextPage':
+              sendTTS('다음 페이지가 없습니다.');
+              console.log('[ResultMain] 다음 페이지');
+              break;
+            default:
+              break;
+          }
+      };
+      gigagenie.voice.onRequestClose=function(){
+        var options={};
+        gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
+            this.stopTTS();
+        });
+      };
+
+      gigagenie.voice.onActionEvent=function(extra){
+          console.log('[ResultMain]발화 문장: ' + extra.uword + " " + extra.actioncode);
+          switch(extra.actioncode){   
+              case 'AddBookmark':
+                  if (self.bookmarkState == 1) {
+                      self.sendTTS("북마크에 이미 추가되었습니다.");
+                  } else {
+                      self.sendTTS("북마크에 저장했습니다.");
+                      self.checkBookMarkState();
+                  }
+                  break;
+              case 'DeleteBookmark':
+                  if (self.bookmarkState == 1) {
+                      self.sendTTS("북마크에 저장했습니다.");
+                      self.checkBookMarkState();
+                  } else {
+                      self.sendTTS("북마크에 존재하지않는 정보입니다.");
+                  }
+                  break;
+              default:
+                  break;
+          }
+      }
+    },
+  
     stopTTS() {
         // TTS중단, 음성인식 중지 
         var options={};
@@ -133,23 +169,6 @@ export default {
                 console.log("음성인식 중단 실패: " + result_msg);
             }
         });
-    },
-    getVoiceCommand() {
-      var self = this;
-      gigagenie.voice.onVoiceCommand=function(event){
-          switch(event){
-              case 'prevPage':
-                  self.$router.replace({path: '/detail/date'});
-                  console.log('[ResultMain] 이전 페이지');
-                  break;
-              case 'nextPage':
-                  sendTTS('다음 페이지가 없습니다.');
-                  console.log('[ResultMain] 다음 페이지');
-                  break;
-              default:
-                  break;
-          }
-      };
     },
     // 선택한 데이터에 따른 추천 로직
     getRecommandData() {
