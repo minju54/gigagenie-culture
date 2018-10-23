@@ -24,12 +24,6 @@ export default {
         return {
             options: {},
             info_text: "북마크 목록입니다.",
-            show_title: "",
-            show_date: "",
-            show_place: "",
-            show_price: "",
-            show_phone: "",
-            show_thumbnail: "" ,
             bookmarkListJson: "",
             bookmarkListArr : "",
             pageArray: []
@@ -37,9 +31,6 @@ export default {
     },
     created() {
         this.init();
-        this.getVoiceCommand();
-        this.datainit(); // test 용도
-        this.exitApp(); 
     },
     methods: {
         init() {
@@ -50,22 +41,15 @@ export default {
             var self = this;
             gigagenie.init(this.options, function(result_cd, result_msg, extra) {
                 if (result_cd === 200) {
-                    self.sendTTS(self.info_text);
+                    // self.sendTTS(self.info_text);
                     self.getBookMarkList();
+                    self.voiceSelectMode();
                 } else {
                     console.log('[bookmarkMain] gigagenie init error: '+ result_cd+ ", " + result_msg);
                 }
             });
         },
-        datainit() {
-            this.show_title = "titletitle";
-            this.show_date = "2018.10.10 ~ 2018.10.11";
-            this.show_place = "국립중앙박물관";
-            this.show_price = "1000원";
-            this.show_phone = "01011111111";
-            this.show_thumbnail = "";
-        },
-        getVoiceCommand() {
+        voiceSelectMode() {
             var self = this;
             gigagenie.voice.onVoiceCommand=function(event){
                 switch(event){
@@ -80,6 +64,13 @@ export default {
                     default:
                         break;
                 }
+            };
+
+            gigagenie.voice.onRequestClose=function(){
+                var options={};
+                gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
+                    self.stopTTS();
+                });
             };
         },
         sendTTS(msg) {
@@ -109,12 +100,10 @@ export default {
                         //console.log('extra.data: ' + extra.data);
                         console.log('[BookmarkMain]bookmark length: ' + Object.keys(self.bookmarkListJson).length);
                         //console.log('index 0 : ' + JSON.stringify(self.bookmarkListJson[0]) + self.bookmarkListJson[0].title);
-                       
+                        self.sendTTS(self.info_text + " 총[IS]" + Object.keys(self.bookmarkListJson).length + "[/IS]건의 목록이 있습니다.");
                         self.pageArray = self.bookmarkListJson;
                         $.each(self.bookmarkListJson, function (index, data) {
-                            console.log('bookmarkList key ', self.bookmarkListJson[index].title)
-                            
-                            // self.show_title = data.title;
+                            console.log('BookmarkMain]title: ', self.bookmarkListJson[index].title)
                         });
                         break;
                     case 403:
@@ -136,16 +125,6 @@ export default {
                 }
             });      
         },
-        exitApp() {
-            // 음성종료, 리모컨 나가기 키 클릭
-            var self = this;
-            gigagenie.voice.onRequestClose=function(){
-                var options={};
-                gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
-                    this.stopTTS();
-                });
-            };
-        }, 
         stopTTS() {
             // TTS중단, 음성인식 중지 
             var options={};

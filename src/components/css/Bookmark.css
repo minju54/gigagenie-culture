@@ -20,7 +20,8 @@
 #idx-circle {
     width: 30px;
     height: 30px;
-    margin-top: 5px;
+    margin-left: 115px;
+    margin-bottom: 7px;
 }
 
 #content-row {
@@ -35,9 +36,11 @@
     zoom: 1;
     border-radius: 10px;
     width: 440px;
-    height: 560px;
-    margin-left: 20px;
-    margin-right: 20px;
+    height: 510px;
+}
+
+#item-col {
+    margin-right: 120px;
 }
 
 #prev-button, #next-button {
@@ -47,8 +50,6 @@
     background:transparent;
     border: transparent;
 }
-
-
 
 #arrow-img{
     width: 25px;
@@ -60,12 +61,12 @@
     height: 300px;
     border-radius: 10px;
     margin-bottom: 15px;
-
 }
 
 #t-text {
     font-size: 19px;
     text-align: center;
+    /* margin-left: 10px; */
 }
 
 #c-text {
@@ -75,20 +76,20 @@
 #delete-button {
     background:transparent;
     border: transparent;
-    position: absolute;
-    right: 10px;
+    margin-left: 115px;
+    margin-top: 5px;
 }
 #delete-img{
-    width: 25px;
-    height: 25px;
-    /* margin-left: 200px; */
+    width: 27px;
+    height: 27px;
 }
 
 #btn-cover{
-    margin-top: 10px;
+    margin-top: 20px;
     text-align: center;
 }
 
 #show-title{
     font-size: 25px;
+    padding-top: 10px;
 }

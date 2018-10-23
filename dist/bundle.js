@@ -12236,11 +12236,17 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data: function data() {
         return {
-            msg: ['처음 화면으로 이동하고 싶다면 \"기가지니, 홈으로\"', '이전 화면으로 이동하고 싶다면 \"기가지니, 이전 페이지\"', '다음 화면으로 이동하고 싶다면 \"기가지니, 다음 페이지\"'],
+            msg: ['처음 화면으로 이동하고 싶다면 \"기가지니, 홈으로\"', '이전 화면으로 이동하고 싶다면 \"기가지니, 이전 페이지\"', '다음 화면으로 이동하고 싶다면 \"기가지니, 다음 페이지\"', '종료하려면 \"기가지니, 나가기\"'],
+            msg2: ['북마크에 저장하려면 \"기가지니, 북마크 저장\"', '북마크에서 삭제하려면 \"기가지니, 북마크 삭제\"', '목록에서 특정 북마크를 삭제하려면 \"기가지니, 1번 북마크 삭제\"'],
             intervalid: '',
             seen: 1
         };
@@ -12257,7 +12263,7 @@ if (false) {(function () {
             this.intervalid = setInterval(function () {
                 // this.changes = ((Math.random() * 100).toFixed(2))+'%';
                 this.seen++;
-                if (this.seen > 3) {
+                if (this.seen > 4) {
                     this.seen = 1;
                 }
             }.bind(this), 2000);
@@ -12299,10 +12305,6 @@ if (false) {(function () {
     },
     created: function created() {
         this.init();
-        this.getUserVoice();
-        this.setVoiceFlag();
-        this.getVoiceCommand();
-        this.exitApp();
     },
 
     components: {
@@ -12318,13 +12320,15 @@ if (false) {(function () {
             var self = this;
             gigagenie.init(this.options, function (result_cd, result_msg, extra) {
                 if (result_cd === 200) {
+                    self.voiceSelectMode();
                     // self.sendTTS(self.info_text);
                 } else {
                     console.log('[MainCategory] gigagenie init error: ' + result_cd + ", " + result_msg);
+                    self.voiceSelectMode();
                 }
             });
         },
-        getVoiceCommand: function getVoiceCommand() {
+        voiceSelectMode: function voiceSelectMode() {
             var self = this;
             gigagenie.voice.onVoiceCommand = function (event) {
                 switch (event) {
@@ -12340,11 +12344,9 @@ if (false) {(function () {
                         break;
                 }
             };
-        },
-        getUserVoice: function getUserVoice() {
+
             this.options = {};
             this.options.voicemsg = this.info_text;
-            var self = this;
             gigagenie.voice.getVoiceText(this.options, function (result_cd, result_msg, extra) {
                 if (result_cd === 200) {
                     console.log("[MainCategory]Received Text is " + extra.voicetext);
@@ -12359,9 +12361,7 @@ if (false) {(function () {
                     console.log('[MainCategory]getUserVoice err: ' + result_cd + ": " + result_msg);
                 };
             });
-        },
-        setVoiceFlag: function setVoiceFlag() {
-            var self = this;
+
             this.options = {};
             this.options.flag = 1; //  ContainerApp 에서 음성선택번호 및 확인/취소 수신
             gigagenie.voice.setKwsVoiceRecv(this.options, function (result_cd, result_msg, extra) {
@@ -12369,6 +12369,13 @@ if (false) {(function () {
                     self.getUserSelectedNum(extra);
                 };
             });
+
+            gigagenie.voice.onRequestClose = function () {
+                var options = {};
+                gigagenie.voice.svcFinished(options, function (result_cd, result_msg, extra) {
+                    self.stopTTS();
+                });
+            };
         },
         getUserSelectedNum: function getUserSelectedNum(event) {
             var self = this;
@@ -12385,16 +12392,6 @@ if (false) {(function () {
                     default:
                         break;
                 };
-            };
-        },
-        exitApp: function exitApp() {
-            // 음성종료, 리모컨 나가기 키 클릭
-            var self = this;
-            gigagenie.voice.onRequestClose = function () {
-                var options = {};
-                gigagenie.voice.svcFinished(options, function (result_cd, result_msg, extra) {
-                    this.stopTTS();
-                });
             };
         },
         stopTTS: function stopTTS() {
@@ -14272,13 +14269,12 @@ module.exports = __webpack_require__.p + "not-found.png?e0a81313dd942f95f06dd994
             show_thumbnail: "",
             dt_today: new Date(),
             bookmarkState: '', // -1안함, 1함
-            bookmarkListJson: ''
+            bookmarkListJson: '',
+            msg: ''
         };
     },
     created: function created() {
         this.init();
-        this.getVoiceCommand();
-        this.exitApp();
     },
 
     components: {
@@ -14294,27 +14290,14 @@ module.exports = __webpack_require__.p + "not-found.png?e0a81313dd942f95f06dd994
             var self = this;
             gigagenie.init(this.options, function (result_cd, result_msg, extra) {
                 if (result_cd === 200) {
-
                     self.getRecommandData();
-                    // self.deleteTestBookmark();
+                    self.voiceSelectMode();
                 } else {
                     console.log('[ResultToday] gigagenie init error: ' + result_cd + ", " + result_msg);
                 }
             });
         },
-        deleteTestBookmark: function deleteTestBookmark() {
-            this.options = {};
-            this.options.namespace = 'bookmark';
-            this.options.key = 'info';
-            gigagenie.appdata.delKeyData(this.options, function (result_cd, result_msg, extra) {
-                if (result_cd === 200) {
-                    console.log("[ResultToday] Bookmark delete success");
-                } else {
-                    console.log("[ResultToday] Bookmark delete Error " + result_cd + " : " + result_msg);
-                }
-            });
-        },
-        getVoiceCommand: function getVoiceCommand() {
+        voiceSelectMode: function voiceSelectMode() {
             var self = this;
             gigagenie.voice.onVoiceCommand = function (event) {
                 switch (event) {
@@ -14330,14 +14313,35 @@ module.exports = __webpack_require__.p + "not-found.png?e0a81313dd942f95f06dd994
                         break;
                 }
             };
-        },
-        exitApp: function exitApp() {
-            // 음성종료, 리모컨 나가기 키 클릭
-            var self = this;
+
+            gigagenie.voice.onActionEvent = function (extra) {
+                console.log('[ResultToday]발화 문장: ' + extra.uword + " " + extra.actioncode);
+                switch (extra.actioncode) {
+                    case 'AddBookmark':
+                        if (self.bookmarkState == 1) {
+                            self.sendTTS("북마크에 이미 추가되었습니다.");
+                        } else {
+                            self.sendTTS("북마크에 저장했습니다.");
+                            self.checkBookMarkState();
+                        }
+                        break;
+                    case 'DeleteBookmark':
+                        if (self.bookmarkState == 1) {
+                            self.sendTTS("북마크에 저장했습니다.");
+                            self.checkBookMarkState();
+                        } else {
+                            self.sendTTS("북마크에 존재하지않는 정보입니다.");
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            };
+
             gigagenie.voice.onRequestClose = function () {
                 var options = {};
                 gigagenie.voice.svcFinished(options, function (result_cd, result_msg, extra) {
-                    this.stopTTS();
+                    self.stopTTS();
                 });
             };
         },
@@ -14354,24 +14358,15 @@ module.exports = __webpack_require__.p + "not-found.png?e0a81313dd942f95f06dd994
                 }
             });
         },
-        sendTTS: function sendTTS(type) {
+        sendTTS: function sendTTS(msg) {
             var self = this;
             this.options = {};
-            var msg = '';
-            if (type === 1) {
-                this.options.ttstext = this.info_text + " " + this.show_title + " 는 어떠세요?";
-            } else {
-                this.options.ttstext = "죄송합니다. 오늘 해당하는 전시가 없습니다.";
-            }
-
-            // this.options.ttstext = "테스트";
-
+            this.options.ttstext = msg;
 
             gigagenie.voice.sendTTS(this.options, function (result_cd, result_msg, extra) {
                 if (result_cd === 200) {} else {
                     //extra.reason 에 voice 오류 전달.
-                    console.log("[ResultToday]gigagenie.voice.sendTTS - result_cd:" + result_cd);
-                    console.log("[ResultToday]gigagenie.voice.sendTTS - result_msg:" + result_msg);
+                    console.log("[ResultToday]gigagenie.voice.sendTTS - result_cd:" + result_cd + " " + result_msg);
                     console.log("[ResultToday]gigagenie.voice.sendTTS - extra:" + __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify___default()(extra));
                 };
             });
@@ -14413,7 +14408,7 @@ module.exports = __webpack_require__.p + "not-found.png?e0a81313dd942f95f06dd994
                             return false; // 하나 찾고 loop 중지
                         } else {
                             self.infoMatched = 0;
-                            console.log('[ResultToday] false: ', $(this).find("area").text());
+                            //console.log('[ResultToday] false: ', $(this).find("area").text());
                         }
                     });
                 },
@@ -14422,7 +14417,12 @@ module.exports = __webpack_require__.p + "not-found.png?e0a81313dd942f95f06dd994
                 }
             });
             this.getBookMarkState();
-            this.sendTTS(this.infoMatched);
+            if (this.infoMatched === 1) {
+                this.msg = this.info_text + " " + this.show_title + " 는 어떠세요?";
+            } else {
+                this.msg = "죄송합니다. 오늘 해당하는 전시가 없습니다.";
+            }
+            this.sendTTS(this.msg);
         },
         getDetailData: function getDetailData(seq) {
             var _this2 = this;
@@ -14488,10 +14488,8 @@ module.exports = __webpack_require__.p + "not-found.png?e0a81313dd942f95f06dd994
                         $.each(self.bookmarkListJson, function (index, data) {
                             //console.log('bookmarkList key ', index)
                             if (data.seq === self.show_seqNum) {
-                                console.log('[ResultToday] 북마크에 있음!!');
                                 self.bookmarkState = 1;
                             } else {
-                                console.log('[ResultToday] 북마크에 없음');
                                 self.bookmarkState = -1;
                             }
                         });
@@ -14602,7 +14600,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n    padding-right: 255px;\n}\n#title-top {\n    color: #ffffff;\n    padding-top: 13px;\n    padding-bottom: 13px;\n    padding-left: 37px;\n    padding-right: 30px;\n    text-align: left;\n    font-size: 25px;\n    font-weight: bold;\n    background: rgba(221, 182, 83, 0.8);\n    border-radius: 10px;\n    width: 190px;\n}\n\n#idx-circle {\n    width: 30px;\n    height: 30px;\n    margin-top: 5px;\n}\n\n#content-row {\n    margin-top: 30px;\n}\n\n#bookmark-item{\n    background: transparent; \n    background-color: rgba( 255, 255, 255, 0.3); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    zoom: 1;\n    border-radius: 10px;\n    width: 440px;\n    height: 560px;\n    margin-left: 20px;\n    margin-right: 20px;\n}\n\n#prev-button, #next-button {\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n    background:transparent;\n    border: transparent;\n}\n\n\n\n#arrow-img{\n    width: 25px;\n    height: 25px;\n}\n\n#thumbnail {\n    width: 270px;\n    height: 300px;\n    border-radius: 10px;\n    margin-bottom: 15px;\n\n}\n\n#t-text {\n    font-size: 19px;\n    text-align: center;\n}\n\n#c-text {\n    font-size: 19px;\n    text-align: left;\n}\n#delete-button {\n    background:transparent;\n    border: transparent;\n    position: absolute;\n    right: 10px;\n}\n#delete-img{\n    width: 25px;\n    height: 25px;\n    /* margin-left: 200px; */\n}\n\n#btn-cover{\n    margin-top: 10px;\n    text-align: center;\n}\n\n#show-title{\n    font-size: 25px;\n}", ""]);
+exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n    padding-right: 255px;\n}\n#title-top {\n    color: #ffffff;\n    padding-top: 13px;\n    padding-bottom: 13px;\n    padding-left: 37px;\n    padding-right: 30px;\n    text-align: left;\n    font-size: 25px;\n    font-weight: bold;\n    background: rgba(221, 182, 83, 0.8);\n    border-radius: 10px;\n    width: 190px;\n}\n\n#idx-circle {\n    width: 30px;\n    height: 30px;\n    margin-left: 115px;\n    margin-bottom: 7px;\n}\n\n#content-row {\n    margin-top: 30px;\n}\n\n#bookmark-item{\n    background: transparent; \n    background-color: rgba( 255, 255, 255, 0.3); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    zoom: 1;\n    border-radius: 10px;\n    width: 440px;\n    height: 510px;\n}\n\n#item-col {\n    margin-right: 120px;\n}\n\n#prev-button, #next-button {\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n    background:transparent;\n    border: transparent;\n}\n\n#arrow-img{\n    width: 25px;\n    height: 25px;\n}\n\n#thumbnail {\n    width: 270px;\n    height: 300px;\n    border-radius: 10px;\n    margin-bottom: 15px;\n}\n\n#t-text {\n    font-size: 19px;\n    text-align: center;\n    /* margin-left: 10px; */\n}\n\n#c-text {\n    font-size: 19px;\n    text-align: left;\n}\n#delete-button {\n    background:transparent;\n    border: transparent;\n    margin-left: 115px;\n    margin-top: 5px;\n}\n#delete-img{\n    width: 27px;\n    height: 27px;\n}\n\n#btn-cover{\n    margin-top: 20px;\n    text-align: center;\n}\n\n#show-title{\n    font-size: 25px;\n    padding-top: 10px;\n}", ""]);
 
 // exports
 
@@ -14647,12 +14645,6 @@ exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n
         return {
             options: {},
             info_text: "북마크 목록입니다.",
-            show_title: "",
-            show_date: "",
-            show_place: "",
-            show_price: "",
-            show_phone: "",
-            show_thumbnail: "",
             bookmarkListJson: "",
             bookmarkListArr: "",
             pageArray: []
@@ -14660,9 +14652,6 @@ exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n
     },
     created: function created() {
         this.init();
-        this.getVoiceCommand();
-        this.datainit(); // test 용도
-        this.exitApp();
     },
 
     methods: {
@@ -14674,22 +14663,15 @@ exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n
             var self = this;
             gigagenie.init(this.options, function (result_cd, result_msg, extra) {
                 if (result_cd === 200) {
-                    self.sendTTS(self.info_text);
+                    // self.sendTTS(self.info_text);
                     self.getBookMarkList();
+                    self.voiceSelectMode();
                 } else {
                     console.log('[bookmarkMain] gigagenie init error: ' + result_cd + ", " + result_msg);
                 }
             });
         },
-        datainit: function datainit() {
-            this.show_title = "titletitle";
-            this.show_date = "2018.10.10 ~ 2018.10.11";
-            this.show_place = "국립중앙박물관";
-            this.show_price = "1000원";
-            this.show_phone = "01011111111";
-            this.show_thumbnail = "";
-        },
-        getVoiceCommand: function getVoiceCommand() {
+        voiceSelectMode: function voiceSelectMode() {
             var self = this;
             gigagenie.voice.onVoiceCommand = function (event) {
                 switch (event) {
@@ -14704,6 +14686,13 @@ exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n
                     default:
                         break;
                 }
+            };
+
+            gigagenie.voice.onRequestClose = function () {
+                var options = {};
+                gigagenie.voice.svcFinished(options, function (result_cd, result_msg, extra) {
+                    self.stopTTS();
+                });
             };
         },
         sendTTS: function sendTTS(msg) {
@@ -14731,12 +14720,10 @@ exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n
                         //console.log('extra.data: ' + extra.data);
                         console.log('[BookmarkMain]bookmark length: ' + __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys___default()(self.bookmarkListJson).length);
                         //console.log('index 0 : ' + JSON.stringify(self.bookmarkListJson[0]) + self.bookmarkListJson[0].title);
-
+                        self.sendTTS(self.info_text + " 총[IS]" + __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys___default()(self.bookmarkListJson).length + "[/IS]건의 목록이 있습니다.");
                         self.pageArray = self.bookmarkListJson;
                         $.each(self.bookmarkListJson, function (index, data) {
-                            console.log('bookmarkList key ', self.bookmarkListJson[index].title);
-
-                            // self.show_title = data.title;
+                            console.log('BookmarkMain]title: ', self.bookmarkListJson[index].title);
                         });
                         break;
                     case 403:
@@ -14757,16 +14744,6 @@ exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n
                         break;
                 }
             });
-        },
-        exitApp: function exitApp() {
-            // 음성종료, 리모컨 나가기 키 클릭
-            var self = this;
-            gigagenie.voice.onRequestClose = function () {
-                var options = {};
-                gigagenie.voice.svcFinished(options, function (result_cd, result_msg, extra) {
-                    this.stopTTS();
-                });
-            };
         },
         stopTTS: function stopTTS() {
             // TTS중단, 음성인식 중지 
@@ -14835,6 +14812,15 @@ module.exports = function (it) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify__);
+
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -14879,7 +14865,7 @@ module.exports = function (it) {
     data: function data() {
         return {
             pageNum: 0,
-            numCircle: ["../../assets/numCircle1.png", "../../assets/numCircle2.png", "../../assets/numCircle3.png"]
+            options: {}
         };
     },
 
@@ -14894,6 +14880,24 @@ module.exports = function (it) {
             default: 3
         }
     },
+    created: function created() {
+        gigagenie.voice.onActionEvent = function (extra) {
+            console.log('[PaginatedList]발화 문장: ' + extra.uword + " " + extra.actioncode);
+            switch (extra.actioncode) {
+                case 'AddBookmark':
+                    self.sendTTS("북마크에 이미 추가되었습니다.");
+                    break;
+                case 'DeleteBookmark':
+                    self.sendTTS("북마크에서 삭제했습니다.");
+                    idx = extra.parameter['NE-B-Ordinal'];
+                    deleteBookmark(idx);
+                    break;
+                default:
+                    break;
+            }
+        };
+    },
+
     methods: {
         nextPage: function nextPage() {
             this.pageNum += 1;
@@ -14901,8 +14905,37 @@ module.exports = function (it) {
         prevPage: function prevPage() {
             this.pageNum -= 1;
         },
-        getImageUrl: function getImageUrl() {
-            numCircle[page];
+        deleteBookmark: function deleteBookmark(idx) {
+            idx = this.pageNum * 3 + idx;
+            console.log('[PaginatedList] delete bf) listArray: ' + this.listArray);
+            this.listArray.splice(idx, 1);
+            console.log('[PaginatedList] delete af) listArray: ' + this.listArray);
+
+            // 전체 북마크 데이터 삭제
+            var self = this;
+            this.options = {};
+            this.options.namespace = 'bookmark';
+            this.options.key = 'info';
+            gigagenie.appdata.delKeyData(this.options, function (result_cd, result_msg, extra) {
+                if (result_cd === 200) {
+                    console.log("[PaginatedList] Bookmark delete success");
+                    // 정제한 JSON데이터로 다시 북마크 저장
+                    self.options.data = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify___default()(self.listArray);
+                    self.setBookmarkData(self.options);
+                } else {
+                    console.log("[PaginatedList] Bookmark delete Error " + result_cd + " : " + result_msg);
+                }
+            });
+        },
+        setBookmarkData: function setBookmarkData(options) {
+            var self = this;
+            gigagenie.appdata.setKeyData(options, function (result_cd, result_msg, extra) {
+                if (result_cd === 200) {
+                    console.log('[PaginatedList]북마크 삭제 성공!');
+                } else {
+                    console.log("[PaginatedList]북마크 삭제 실패");
+                }
+            });
         }
     },
     computed: {
@@ -15875,7 +15908,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "#footer{\n    padding-top: 50px;\n    padding-bottom: 68px;\n    /* width: ; */\n}\n\n#home-text {\n    margin-left: 80px;\n    text-align: left;\n    color: #ffffff;\n    font-size: 20px;\n}\n\n#end-text {\n    margin-right: 80px;\n    text-align: right;\n    color: #ffffff;\n    font-size: 20px;\n}\n\n", ""]);
+exports.push([module.i, "#footer{\n    padding-top: 70px;\n    padding-bottom: 48px;\n    /* width: ; */\n}\n\n#home-text {\n    margin-left: 80px;\n    text-align: left;\n    color: #ffffff;\n    font-size: 20px;\n}\n\n#end-text {\n    margin-right: 80px;\n    text-align: right;\n    color: #ffffff;\n    font-size: 20px;\n}\n\n", ""]);
 
 // exports
 
@@ -15900,27 +15933,32 @@ var render = function() {
             ? _c("p", { attrs: { id: "home-text" } }, [
                 _vm._v(" " + _vm._s(_vm.msg[1]))
               ])
-            : _c("p", { attrs: { id: "home-text" } }, [
-                _vm._v(" " + _vm._s(_vm.msg[2]))
-              ])
+            : _vm.seen === 3
+              ? _c("p", { attrs: { id: "home-text" } }, [
+                  _vm._v(" " + _vm._s(_vm.msg[2]))
+                ])
+              : _c("p", { attrs: { id: "home-text" } }, [
+                  _vm._v(" " + _vm._s(_vm.msg[3]))
+                ])
       ]),
       _vm._v(" "),
-      _vm._m(0)
+      _c("div", { staticClass: "col-sm-6" }, [
+        _vm.seen === 1
+          ? _c("p", { attrs: { id: "end-text" } }, [
+              _vm._v(" " + _vm._s(_vm.msg2[0]) + " ")
+            ])
+          : _vm.seen === 2
+            ? _c("p", { attrs: { id: "end-text" } }, [
+                _vm._v(" " + _vm._s(_vm.msg2[1]))
+              ])
+            : _c("p", { attrs: { id: "end-text" } }, [
+                _vm._v(" " + _vm._s(_vm.msg2[2]))
+              ])
+      ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-sm-6" }, [
-      _c("p", { attrs: { id: "end-text" } }, [
-        _vm._v('종료하려면 "기가지니, 나가기"')
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
@@ -22198,56 +22236,100 @@ var render = function() {
     _c(
       "div",
       { staticClass: "row", attrs: { id: "content-row" } },
-      _vm._l(_vm.paginatedData, function(p) {
+      _vm._l(_vm.paginatedData, function(p, idx) {
         return _c(
           "div",
-          {
-            key: p.seq,
-            staticClass: "col-sm-3",
-            attrs: { id: "bookmark-item" }
-          },
+          { key: p.seq, staticClass: "col-sm-3", attrs: { id: "item-col" } },
           [
-            _c("img", { attrs: { id: "idx-circle", src: "getImageUrl" } }),
+            idx === 0
+              ? _c("img", {
+                  attrs: {
+                    id: "idx-circle",
+                    src: __webpack_require__(4)
+                  }
+                })
+              : idx === 1
+                ? _c("img", {
+                    attrs: {
+                      id: "idx-circle",
+                      src: __webpack_require__(5)
+                    }
+                  })
+                : _c("img", {
+                    attrs: {
+                      id: "idx-circle",
+                      src: __webpack_require__(6)
+                    }
+                  }),
             _vm._v(" "),
-            _c("p", { attrs: { id: "show-title" } }, [
-              _c("b", [_vm._v(_vm._s(p.title))])
-            ]),
-            _vm._v(" "),
-            _c("img", { attrs: { id: "thumbnail", src: p.thumbnail } }),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _vm._m(0, true),
+            _c("div", { attrs: { id: "bookmark-item" } }, [
+              _c("p", { attrs: { id: "show-title" } }, [
+                _c("b", [_vm._v(_vm._s(p.title))])
+              ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-sm-9", attrs: { id: "c-text" } }, [
-                _vm._v(_vm._s(p.date))
+              _c("img", {
+                attrs: {
+                  id: "thumbnail",
+                  src: p.thumbnail,
+                  width: "270px",
+                  height: "300px"
+                }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _vm._m(0, true),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "col-sm-9", attrs: { id: "c-text" } },
+                  [_vm._v(_vm._s(p.date))]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _vm._m(1, true),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "col-sm-9", attrs: { id: "c-text" } },
+                  [_vm._v(_vm._s(p.place))]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _vm._m(2, true),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "col-sm-9", attrs: { id: "c-text" } },
+                  [_vm._v(_vm._s(p.price))]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _vm._m(3, true),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "col-sm-9", attrs: { id: "c-text" } },
+                  [_vm._v(_vm._s(p.phone))]
+                )
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _vm._m(1, true),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-sm-9", attrs: { id: "c-text" } }, [
-                _vm._v(_vm._s(p.place))
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _vm._m(2, true),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-sm-9", attrs: { id: "c-text" } }, [
-                _vm._v(_vm._s(p.price))
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _vm._m(3, true),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-sm-9", attrs: { id: "c-text" } }, [
-                _vm._v(_vm._s(p.phone))
-              ])
-            ]),
-            _vm._v(" "),
-            _vm._m(4, true)
+            _c("button", { attrs: { id: "delete-button" } }, [
+              _c("img", {
+                attrs: {
+                  src: __webpack_require__(153),
+                  id: "delete-img"
+                },
+                on: {
+                  click: function($event) {
+                    _vm.deleteBookmark(idx)
+                  }
+                }
+              })
+            ])
           ]
         )
       })
@@ -22263,7 +22345,7 @@ var render = function() {
         [
           _c("img", {
             attrs: {
-              src: __webpack_require__(153),
+              src: __webpack_require__(154),
               id: "arrow-img"
             }
           })
@@ -22288,7 +22370,7 @@ var render = function() {
         [
           _c("img", {
             attrs: {
-              src: __webpack_require__(154),
+              src: __webpack_require__(155),
               id: "arrow-img"
             }
           })
@@ -22329,19 +22411,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "col-sm-3", attrs: { id: "t-text" } }, [
       _c("b", [_vm._v("문의")])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { attrs: { id: "delete-button" } }, [
-      _c("img", {
-        attrs: {
-          src: __webpack_require__(155),
-          id: "delete-img"
-        }
-      })
-    ])
   }
 ]
 render._withStripped = true
@@ -22358,19 +22427,19 @@ if (false) {
 /* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "left-arrow.png?9e8c33db8a0040ba580a721a19a9b224";
+module.exports = __webpack_require__.p + "delete-button.png?8ed206202da0df9ff6a306891a98a30a";
 
 /***/ }),
 /* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "right-arrow.png?b5ee37a7a95230daaac50c9a59c8a005";
+module.exports = __webpack_require__.p + "left-arrow.png?9e8c33db8a0040ba580a721a19a9b224";
 
 /***/ }),
 /* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "delete-button.png?81012ceeb2140e4477dc6a2ef46556f3";
+module.exports = __webpack_require__.p + "right-arrow.png?b5ee37a7a95230daaac50c9a59c8a005";
 
 /***/ }),
 /* 156 */

@@ -22,10 +22,6 @@ export default {
     },
     created() {
         this.init();
-        this.getUserVoice();
-        this.setVoiceFlag();
-        this.getVoiceCommand();
-        this.exitApp();
     },
     components: {
         mainTop: MainTop,
@@ -40,13 +36,15 @@ export default {
             var self = this;
             gigagenie.init(this.options, function(result_cd, result_msg, extra) {
                 if (result_cd === 200) {
+                    self.voiceSelectMode();
                     // self.sendTTS(self.info_text);
                 } else {
                     console.log('[MainCategory] gigagenie init error: '+ result_cd+ ", " + result_msg);
+                    self.voiceSelectMode();
                 }
             });
         },
-        getVoiceCommand() {
+        voiceSelectMode() {
             var self = this;
             gigagenie.voice.onVoiceCommand=function(event){
                 switch(event){
@@ -62,11 +60,9 @@ export default {
                         break;
                 }
             };
-        },
-        getUserVoice() {
+
             this.options={};
             this.options.voicemsg= this.info_text;
-            var self = this;
             gigagenie.voice.getVoiceText(this.options,function(result_cd,result_msg,extra){
                 if(result_cd===200){
                     console.log("[MainCategory]Received Text is " + extra.voicetext);
@@ -81,9 +77,7 @@ export default {
                     console.log('[MainCategory]getUserVoice err: ' +  result_cd + ": " + result_msg);
                 }; 
             });
-        },
-        setVoiceFlag() {
-            var self = this;
+
             this.options={};
             this.options.flag=1; //  ContainerApp 에서 음성선택번호 및 확인/취소 수신
             gigagenie.voice.setKwsVoiceRecv (this.options,function(result_cd,result_msg,extra){
@@ -91,7 +85,14 @@ export default {
                     self.getUserSelectedNum(extra);
                 };
             });
-        }, 
+
+            gigagenie.voice.onRequestClose=function(){
+                var options={};
+                gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
+                    self.stopTTS();
+                });
+            };
+        },
         getUserSelectedNum(event) {
             var self = this;
             gigagenie.voice.onSelectedIndex=function(event){
@@ -109,16 +110,6 @@ export default {
                 };
             }
         },
-        exitApp() {
-            // 음성종료, 리모컨 나가기 키 클릭
-            var self = this;
-            gigagenie.voice.onRequestClose=function(){
-                var options={};
-                gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
-                    this.stopTTS();
-                });
-            };
-        }, 
         stopTTS() {
             // TTS중단, 음성인식 중지 
             var options={};

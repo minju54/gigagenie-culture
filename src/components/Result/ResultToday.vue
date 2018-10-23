@@ -68,13 +68,12 @@ export default {
             show_thumbnail: "",
             dt_today: new Date(),
             bookmarkState: '', // -1안함, 1함
-            bookmarkListJson: ''
+            bookmarkListJson: '',
+            msg : ''
         }
     },
     created() {
         this.init();
-        this.getVoiceCommand();
-        this.exitApp();
     },
     components: {
         mainTop: MainTop,
@@ -88,28 +87,15 @@ export default {
             
             var self = this;
             gigagenie.init(this.options, function(result_cd, result_msg, extra) {
-                if (result_cd === 200) {
-                   
+                if (result_cd === 200) { 
                     self.getRecommandData();
-                    // self.deleteTestBookmark();
+                    self.voiceSelectMode()
                 } else {
                     console.log('[ResultToday] gigagenie init error: '+ result_cd+ ", " + result_msg);
                 }
             });
         },
-        deleteTestBookmark() {
-            this.options={};
-            this.options.namespace='bookmark';
-            this.options.key='info';
-            gigagenie.appdata.delKeyData(this.options,function(result_cd,result_msg,extra){
-                if(result_cd===200){
-                    console.log("[ResultToday] Bookmark delete success");
-                } else {
-                    console.log("[ResultToday] Bookmark delete Error "+ result_cd + " : " + result_msg);
-                }
-            });
-        },
-        getVoiceCommand() {
+        voiceSelectMode() {
             var self = this;
             gigagenie.voice.onVoiceCommand=function(event){
                 switch(event){
@@ -125,17 +111,38 @@ export default {
                         break;
                 }
             };
-        },
-        exitApp() {
-            // 음성종료, 리모컨 나가기 키 클릭
-            var self = this;
+
+            gigagenie.voice.onActionEvent=function(extra){
+                console.log('[ResultToday]발화 문장: ' + extra.uword + " " + extra.actioncode);
+                switch(extra.actioncode){   
+                    case 'AddBookmark':
+                        if (self.bookmarkState == 1) {
+                            self.sendTTS("북마크에 이미 추가되었습니다.");
+                        } else {
+                            self.sendTTS("북마크에 저장했습니다.");
+                            self.checkBookMarkState();
+                        }
+                        break;
+                    case 'DeleteBookmark':
+                        if (self.bookmarkState == 1) {
+                            self.sendTTS("북마크에 저장했습니다.");
+                            self.checkBookMarkState();
+                        } else {
+                            self.sendTTS("북마크에 존재하지않는 정보입니다.");
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             gigagenie.voice.onRequestClose=function(){
                 var options={};
                 gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
-                    this.stopTTS();
+                    self.stopTTS();
                 });
             };
-        }, 
+        },
         stopTTS() {
             // TTS중단, 음성인식 중지 
             var options={};
@@ -151,26 +158,17 @@ export default {
                 }
             });
         },
-        sendTTS(type) {
+        sendTTS(msg) {
             var self = this;
             this.options = {};
-            var msg = '';
-            if (type === 1) {
-                this.options.ttstext = this.info_text + " " + this.show_title + " 는 어떠세요?";
-            } else {
-                this.options.ttstext = "죄송합니다. 오늘 해당하는 전시가 없습니다.";
-            }
-            
-            // this.options.ttstext = "테스트";
-            
-            
+            this.options.ttstext = msg;
+
             gigagenie.voice.sendTTS(this.options, function(result_cd, result_msg, extra) {
                 if(result_cd===200){
 
                 } else {
                     //extra.reason 에 voice 오류 전달.
-                    console.log("[ResultToday]gigagenie.voice.sendTTS - result_cd:" + result_cd);
-                    console.log("[ResultToday]gigagenie.voice.sendTTS - result_msg:" + result_msg);
+                    console.log("[ResultToday]gigagenie.voice.sendTTS - result_cd:" + result_cd + " " + result_msg);
                     console.log("[ResultToday]gigagenie.voice.sendTTS - extra:" + JSON.stringify(extra));
                 };
             });
@@ -210,14 +208,19 @@ export default {
                             return false; // 하나 찾고 loop 중지
                         } else {
                             self.infoMatched = 0;
-                            console.log('[ResultToday] false: ', $(this).find("area").text());
+                            //console.log('[ResultToday] false: ', $(this).find("area").text());
                         }
                     }); 
                 },
                 error: err => console.log('[ResultToday]getRecommandData err', err)
             });
             this.getBookMarkState();
-            this.sendTTS(this.infoMatched);
+            if (this.infoMatched === 1) {
+                this.msg = this.info_text + " " + this.show_title + " 는 어떠세요?";
+            } else {
+                this.msg = "죄송합니다. 오늘 해당하는 전시가 없습니다.";
+            }
+            this.sendTTS(this.msg);
         },
         getDetailData(seq) {
             var self = this;
@@ -280,10 +283,8 @@ export default {
                         $.each(self.bookmarkListJson, function (index, data) {
                             //console.log('bookmarkList key ', index)
                             if (data.seq === self.show_seqNum) {
-                                console.log('[ResultToday] 북마크에 있음!!');
                                 self.bookmarkState = 1;
                             } else {
-                                console.log('[ResultToday] 북마크에 없음');
                                 self.bookmarkState = -1;
                             }
                         })
