@@ -12292,6 +12292,48 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -12305,6 +12347,7 @@ if (false) {(function () {
     },
     created: function created() {
         this.init();
+        // this.divClickable();
     },
 
     components: {
@@ -12330,10 +12373,18 @@ if (false) {(function () {
         },
         voiceSelectMode: function voiceSelectMode() {
             var self = this;
+            this.options = {};
+            this.options.flag = 1; //  ContainerApp 에서 음성선택번호 및 확인/취소 수신
+            gigagenie.voice.setKwsVoiceRecv(this.options, function (result_cd, result_msg, extra) {
+                if (result_cd === 200) {
+                    //self.getUserSelectedNum(extra);
+                };
+            });
+
             gigagenie.voice.onVoiceCommand = function (event) {
                 switch (event) {
                     case 'prevPage':
-                        // self.$router.replace({path: '/'});
+                        self.$router.replace({ path: '/' });
                         console.log('[MainCategory] 이전 페이지');
                         break;
                     case 'nextPage':
@@ -12362,33 +12413,42 @@ if (false) {(function () {
                 };
             });
 
-            this.options = {};
-            this.options.flag = 1; //  ContainerApp 에서 음성선택번호 및 확인/취소 수신
-            gigagenie.voice.setKwsVoiceRecv(this.options, function (result_cd, result_msg, extra) {
-                if (result_cd === 200) {
-                    self.getUserSelectedNum(extra);
-                };
-            });
-
             gigagenie.voice.onRequestClose = function () {
                 var options = {};
                 gigagenie.voice.svcFinished(options, function (result_cd, result_msg, extra) {
                     self.stopTTS();
                 });
             };
-        },
-        getUserSelectedNum: function getUserSelectedNum(event) {
-            var self = this;
+
+            this.options = {};
+            this.options.voicemsg = this.info_text;
+            gigagenie.voice.getVoiceText(this.options, function (result_cd, result_msg, extra) {
+                if (result_cd === 200) {
+                    console.log("[MainCategory]Received Text is " + extra.voicetext);
+                    if (extra.voicetext == "1번") {
+                        self.pageMove(1);
+                    } else if (extra.voicetext == "2번") {
+                        self.pageMove(2);
+                    } else if (extra.voicetext == "3번") {
+                        self.pageMove(3);
+                    } else {
+                        //self.getUserVoice();
+                    }
+                } else {
+                    console.log('[MainCategory]getUserVoice err: ' + result_cd + ": " + result_msg);
+                };
+            });
+
             gigagenie.voice.onSelectedIndex = function (event) {
                 switch (event) {
                     case 1:
-                        pageMove(1);
+                        self.pageMove(1);
                         break;
                     case 2:
-                        pageMove(2);
+                        self.pageMove(2);
                         break;
                     case 3:
-                        pageMove(3);
+                        self.pageMove(3);
                     default:
                         break;
                 };
@@ -12425,12 +12485,12 @@ if (false) {(function () {
             switch (id) {
                 case 1:
                     setTimeout(function () {
-                        self.$router.push('/resultToday');
+                        self.$router.push('/detail/favor');
                     }, 1000);
                     break;
                 case 2:
                     setTimeout(function () {
-                        self.$router.push('/detail/favor');
+                        self.$router.push('/resultToday');
                     }, 1000);
                     break;
                 case 3:
@@ -14600,7 +14660,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n    padding-right: 255px;\n}\n#title-top {\n    color: #ffffff;\n    padding-top: 13px;\n    padding-bottom: 13px;\n    padding-left: 37px;\n    padding-right: 30px;\n    text-align: left;\n    font-size: 25px;\n    font-weight: bold;\n    background: rgba(221, 182, 83, 0.8);\n    border-radius: 10px;\n    width: 190px;\n}\n\n#idx-circle {\n    width: 30px;\n    height: 30px;\n    margin-left: 115px;\n    margin-bottom: 7px;\n}\n\n#content-row {\n    margin-top: 30px;\n}\n\n#bookmark-item{\n    background: transparent; \n    background-color: rgba( 255, 255, 255, 0.3); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    zoom: 1;\n    border-radius: 10px;\n    width: 440px;\n    height: 510px;\n}\n\n#item-col {\n    margin-right: 120px;\n}\n\n#prev-button, #next-button {\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n    background:transparent;\n    border: transparent;\n}\n\n#arrow-img{\n    width: 25px;\n    height: 25px;\n}\n\n#thumbnail {\n    width: 270px;\n    height: 300px;\n    border-radius: 10px;\n    margin-bottom: 15px;\n}\n\n#t-text {\n    font-size: 19px;\n    text-align: center;\n    /* margin-left: 10px; */\n}\n\n#c-text {\n    font-size: 19px;\n    text-align: left;\n}\n#delete-button {\n    background:transparent;\n    border: transparent;\n    margin-left: 115px;\n    margin-top: 5px;\n}\n#delete-img{\n    width: 27px;\n    height: 27px;\n}\n\n#btn-cover{\n    margin-top: 20px;\n    text-align: center;\n}\n\n#show-title{\n    font-size: 25px;\n    padding-top: 10px;\n}", ""]);
+exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n    padding-right: 255px;\n}\n#title-top {\n    color: #ffffff;\n    padding-top: 13px;\n    padding-bottom: 13px;\n    padding-left: 37px;\n    padding-right: 30px;\n    text-align: left;\n    font-size: 25px;\n    font-weight: bold;\n    background: rgba(221, 182, 83, 0.8);\n    border-radius: 10px;\n    width: 190px;\n}\n\n#idx-circle {\n    width: 30px;\n    height: 30px;\n    margin-left: 115px;\n    margin-bottom: 7px;\n}\n\n#content-row {\n    margin-top: 30px;\n}\n\n#bookmark-item{\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.5);\n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    box-shadow: 5px 5px 3px #000000;\n    zoom: 1;\n    border-radius: 10px;\n    width: 440px;\n    height: 510px;\n}\n\n#item-col {\n    margin-right: 120px;\n}\n\n#prev-button, #next-button {\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n    background:transparent;\n    border: transparent;\n}\n\n#arrow-img{\n    width: 25px;\n    height: 25px;\n}\n\n#thumbnail {\n    width: 270px;\n    height: 300px;\n    border-radius: 10px;\n    margin-bottom: 15px;\n}\n\n#t-text {\n    font-size: 19px;\n    text-align: center;\n    /* margin-left: 10px; */\n}\n\n#c-text {\n    font-size: 19px;\n    text-align: left;\n}\n#delete-button {\n    background:transparent;\n    border: transparent;\n    margin-left: 115px;\n    margin-top: 5px;\n}\n#delete-img{\n    width: 27px;\n    height: 27px;\n}\n\n#btn-cover{\n    margin-top: 20px;\n    text-align: center;\n}\n\n#show-title{\n    font-size: 25px;\n    padding-top: 10px;\n}", ""]);
 
 // exports
 
@@ -18878,7 +18938,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "#content{\n    height: 665px;\n}", ""]);
+exports.push([module.i, "#content{\n    height: 665px;\n    padding-top: 50px;\n}\n\n#div-select, #div-today, #div-book{\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.3); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    padding: 20px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#div-select:focus, #div-today:focus, #div-book:focus{\n    background: transparent; \n    background-color: rgba(255, 255, 255, 0.3); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    padding: 20px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#div-select:hover, #div-today:hover, #div-book:hover{\n    background: transparent; \n    background-color: rgba(255, 255, 255, 0.3); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    padding: 20px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n#btn-select {\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.6); \n    border: none;\n    width: 545px;\n    height: 540px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n#btn-today, #btn-book {\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.6); \n    border: none;\n    width: 545px;\n    height: 260px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#btn-book {\n    margin-top: 20px;\n}\n\n#btn-select:focus, #btn-today:focus, #btn-book:focus {\n    /* background-color: rgba(255, 255, 255, 0.2);  */\n    background-color: rgba(0, 0, 0, 0.8);\n    border : 5px solid rgb(221, 182, 83);\n}\n/* #div-select {\n    height: 540px;\n}\n\n#div-today {\n    height: 260px;\n}\n\n#div-book {\n    margin-top: 20px;\n    height: 260px;\n} */\n\n#text-title-top {\n    font-size: 25px;\n    margin-bottom: 30px;\n}\n\n#text-select {\n    font-size: 50px;\n    color : rgb(221, 182, 83);\n    position: relative;\n    text-align: right;\n    padding-right: 20px;\n}\n#text-info-top{\n    font-size: 20px;\n    position: relative;\n    text-align: right; \n    padding-right: 20px;\n}\n\n#text-info-bottom {\n    font-size: 20px;\n    position: relative;\n    text-align: right;\n    padding-right: 20px;\n}\n\n#text-today, #text-book {\n    font-size: 50px;\n    position: relative;\n    text-align: right; \n    padding-right: 20px;\n    /* padding-bottom: 50px; */\n    color : rgb(221, 182, 83);\n}\n\n#text-info {\n    font-size: 20px;\n    position: relative;\n    text-align: right; \n    padding-right: 20px;\n}\n\n#num-circle-right {\n    width: 40px;\n    height: 40px;\n    margin-right: 450px;\n    margin-bottom: 60px;\n}\n\n#num-circle-left {\n    width: 40px;\n    height: 40px;\n    margin-right: 450px;\n    margin-bottom: 290px;\n}", ""]);
 
 // exports
 
@@ -18898,41 +18958,95 @@ var render = function() {
       _c("main-top"),
       _vm._v(" "),
       _c("div", { staticClass: "container", attrs: { id: "content" } }, [
-        _c(
-          "h3",
-          {
-            on: {
-              click: function($event) {
-                _vm.pageMove(1)
-              }
-            }
-          },
-          [_vm._v("오늘의 추천 문화")]
-        ),
+        _vm._m(0),
         _vm._v(" "),
-        _c(
-          "h3",
-          {
-            on: {
-              click: function($event) {
-                _vm.pageMove(2)
-              }
-            }
-          },
-          [_vm._v("선택하기")]
-        ),
-        _vm._v(" "),
-        _c(
-          "h3",
-          {
-            on: {
-              click: function($event) {
-                _vm.pageMove(3)
-              }
-            }
-          },
-          [_vm._v("북마크")]
-        )
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-sm-6" }, [
+            _c(
+              "button",
+              {
+                attrs: { id: "btn-select" },
+                on: {
+                  click: function($event) {
+                    _vm.pageMove(1)
+                  }
+                }
+              },
+              [
+                _c("img", {
+                  attrs: {
+                    id: "num-circle-left",
+                    src: __webpack_require__(4)
+                  }
+                }),
+                _vm._v(" "),
+                _vm._m(1),
+                _vm._v(" "),
+                _c("p", { attrs: { id: "text-info-top" } }, [
+                  _vm._v("조건에 따라 맞춤 문화 정보를 추천해드려요 ")
+                ]),
+                _vm._v(" "),
+                _c("p", { attrs: { id: "text-info-bottom" } }, [
+                  _vm._v("장르, 인원, 요금, 날짜 4가지만 선택해주세요")
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-sm-6" }, [
+            _c(
+              "button",
+              {
+                attrs: { id: "btn-today" },
+                on: {
+                  click: function($event) {
+                    _vm.pageMove(2)
+                  }
+                }
+              },
+              [
+                _c("img", {
+                  attrs: {
+                    id: "num-circle-right",
+                    src: __webpack_require__(5)
+                  }
+                }),
+                _vm._v(" "),
+                _vm._m(2),
+                _vm._v(" "),
+                _c("p", { attrs: { id: "text-info" } }, [
+                  _vm._v("오늘의 문화 정보를 한가지 추천해드려요")
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                attrs: { id: "btn-book" },
+                on: {
+                  click: function($event) {
+                    _vm.pageMove(3)
+                  }
+                }
+              },
+              [
+                _c("img", {
+                  attrs: {
+                    id: "num-circle-right",
+                    src: __webpack_require__(6)
+                  }
+                }),
+                _vm._v(" "),
+                _vm._m(3),
+                _vm._v(" "),
+                _c("p", { attrs: { id: "text-info" } }, [
+                  _vm._v("북마크한 목록을 볼 수 있어요")
+                ])
+              ]
+            )
+          ])
+        ])
       ]),
       _vm._v(" "),
       _c("main-footer")
@@ -18940,7 +19054,41 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { attrs: { id: "text-title-top" } }, [
+      _vm._v("원하는 번호를 선택해주세요. "),
+      _c("b", [_vm._v('"기가지니, 1번"')])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { attrs: { id: "text-select" } }, [
+      _c("b", [_vm._v("맞춤 추천")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { attrs: { id: "text-today" } }, [
+      _c("b", [_vm._v("오늘의 추천 문화")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { attrs: { id: "text-book" } }, [
+      _c("b", [_vm._v("북마크")])
+    ])
+  }
+]
 render._withStripped = true
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
