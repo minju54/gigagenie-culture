@@ -76,10 +76,6 @@ export default {
     created() {
         this.init();
         this.getUserVoice();
-        // this.sendTTS();
-        this.getVoiceCommand();
-        this.setVoiceFlag();
-        this.exitApp();
     },
     methods: {
         init() {
@@ -90,11 +86,61 @@ export default {
             var self = this;
             gigagenie.init(this.options, function(result_cd, result_msg, extra) {
                 if (result_cd === 200) {
-
+                    self.voiceSelectMode();
                 } else {
+                    self.voiceSelectMode();
                     console.log('[DetailGroup] gigagenie init error: '+ result_cd+ ", " + result_msg);
                 }
             });
+        },
+        voiceSelectMode() {
+            var self = this;
+            this.options={};
+            this.options.flag=1; //  ContainerApp 에서 음성선택번호 및 확인/취소 수신
+            gigagenie.voice.setKwsVoiceRecv (this.options,function(result_cd,result_msg,extra){
+                if(result_cd===200){
+                    self.getUserSelectedNum(extra);
+                };
+            });
+
+            gigagenie.voice.onRequestClose=function(){
+                var options={};
+                gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
+                    this.stopTTS();
+                });
+            };
+
+            gigagenie.voice.onVoiceCommand=function(event){
+                switch(event){
+                    case 'prevPage':
+                        self.$router.replace({path: '/detail/favor'});
+                        console.log('[DetailGroup] 이전 페이지');
+                        break;
+                    case 'nextPage':
+                        if (self.selectIdx === 0) {
+                            self.sendTTS("그룹을 먼저 선택해주세요");
+                        } 
+                        console.log('[DetailGroup] 다음 페이지');
+                        break;
+                    default:
+                        break;
+                }
+            };
+
+            // 리모콘 key event 제어
+            window.onkeydown = function(event) {
+                switch(event.keyCode) {
+                    case 49: // 1 
+                        self.selectGroup(1);
+                        break;
+                    case 50:
+                        self.selectGroup(2);   
+                        break;
+                    case 51:
+                        self.selectGroup(3);
+                        break;
+                }
+            }
         },
         sendTTS(msg) {
             this.options = {};
@@ -110,26 +156,6 @@ export default {
                 };
             });
         },
-        setVoiceFlag() {
-            var self = this;
-            this.options={};
-            this.options.flag=1; //  ContainerApp 에서 음성선택번호 및 확인/취소 수신
-            gigagenie.voice.setKwsVoiceRecv (this.options,function(result_cd,result_msg,extra){
-                if(result_cd===200){
-                    self.getUserSelectedNum(extra);
-                };
-            });
-        }, 
-        exitApp() {
-            // 음성종료, 리모컨 나가기 키 클릭
-            var self = this;
-            gigagenie.voice.onRequestClose=function(){
-                var options={};
-                gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
-                    this.stopTTS();
-                });
-            };
-        }, 
         stopTTS() {
             // TTS중단, 음성인식 중지 
             var options={};
@@ -147,22 +173,7 @@ export default {
         },
         getVoiceCommand() {
             var self = this;
-            gigagenie.voice.onVoiceCommand=function(event){
-                switch(event){
-                    case 'prevPage':
-                        self.$router.replace({path: '/detail/favor'});
-                        console.log('[DetailGroup] 이전 페이지');
-                        break;
-                    case 'nextPage':
-                        if (self.selectIdx === 0) {
-                            self.sendTTS("그룹을 먼저 선택해주세요");
-                        } 
-                        console.log('[DetailGroup] 다음 페이지');
-                        break;
-                    default:
-                        break;
-                }
-            };
+            
         },
         getUserVoice() {
             this.options={};
@@ -218,25 +229,6 @@ export default {
         goDetailPrice() {
             var self = this;
             setTimeout(function() {self.$router.push('/detail/price')}, 1000);
-            // this.$router.push({path: '/detail/price'});
-        },
-        pageMove(id) { // 기가지니할때는 없애기!!
-            // switch(id) {
-            //     case 1:
-            //         this.$router.push({path: '/detail/favor'});
-            //         break;
-            //     case 2:
-            //         this.$router.push({path: '/detail/group'});
-            //         break;
-            //     case 3:
-            //         this.$router.push({path: '/detail/price'});
-            //         break;
-            //     case 4:
-            //         this.$router.push({path: '/detail/date'});
-            //         break;
-            //     default:
-            //         break;
-            // }
         }
     }
 }

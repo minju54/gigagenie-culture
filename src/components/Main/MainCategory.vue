@@ -112,21 +112,20 @@ export default {
                 }
             };
 
-            // 여기 안된다~~~~~
-            gigagenie.media.onRemoteKeyEvent=function(extra){
-                console.log('[MainCategory] remote .key: ' + extra.key);
-                switch(extra.key) {
-                    case '49': // 1
+            // 리모콘 key event 제어
+            window.onkeydown = function(event) {
+                switch(event.keyCode) {
+                    case 49: // 1 
                         self.pageMove(1);
                         break;
-                    case '50':
+                    case 50:
                         self.pageMove(2);   
                         break;
-                    case '51':
+                    case 51:
                         self.pageMove(3);
                         break;
                 }
-            };
+            }
 
             this.options={};
             this.options.voicemsg= this.info_text;

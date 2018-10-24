@@ -91,11 +91,7 @@ export default {
     }, 
     created() {
         this.init();
-        // this.sendTTS();
-        this.getUserVoice();
-        this.setVoiceFlag();
-        this.getVoiceCommand();
-        this.exitApp();
+        this.getUserVoice()
     },
     methods: {
         init() {
@@ -106,13 +102,31 @@ export default {
             var self = this;
             gigagenie.init(this.options, function(result_cd, result_msg, extra) {
                 if (result_cd === 200) {
-
+                    self.voiceSelectMode();
                 } else {
+                    self.voiceSelectMode();
                     console.log('[DetailFavor] gigagenie init error: '+ result_cd+ ", " + result_msg);
                 }
             });
         },
-        exitApp() {
+        voiceSelectMode() {
+            gigagenie.voice.onVoiceCommand=function(event){
+                switch(event){
+                    case 'prevPage':
+                        self.$router.replace({path: '/mainCategory'});
+                        console.log('[DetailFavor] 이전 페이지');
+                        break;
+                    case 'nextPage':
+                        if (self.selectIdx === 0) {
+                            self.sendTTS("취향을 먼저 선택해주세요");
+                        } 
+                        console.log('[DetailFavor] 다음 페이지');
+                        break;
+                    default:
+                        break;
+                }
+            };
+
             // 음성종료, 리모컨 나가기 키 클릭
             var self = this;
             gigagenie.voice.onRequestClose=function(){
@@ -121,7 +135,33 @@ export default {
                     this.stopTTS();
                 });
             };
-        }, 
+
+            this.options={};
+            this.options.flag=1; //  ContainerApp 에서 음성선택번호 및 확인/취소 수신
+            gigagenie.voice.setKwsVoiceRecv (this.options,function(result_cd,result_msg,extra){
+                if(result_cd===200){
+                    self.getUserSelectedNum(extra);
+                };
+            });
+
+            // 리모콘 key event 제어
+            window.onkeydown = function(event) {
+                switch(event.keyCode) {
+                    case 49: // 1 
+                        self.selectFavor(1);
+                        break;
+                    case 50:
+                        self.selectFavor(2);   
+                        break;
+                    case 51:
+                        self.selectFavor(3);
+                        break;
+                    case 52:
+                        self.selectFavor(4);
+                        break;
+                }
+            }
+        },
         stopTTS() {
             // TTS중단, 음성인식 중지 
             var options={};
@@ -152,25 +192,6 @@ export default {
                 };
             });
         },
-        getVoiceCommand() {
-            var self = this;
-            gigagenie.voice.onVoiceCommand=function(event){
-                switch(event){
-                    case 'prevPage':
-                        self.$router.replace({path: '/mainCategory'});
-                        console.log('[DetailFavor] 이전 페이지');
-                        break;
-                    case 'nextPage':
-                        if (self.selectIdx === 0) {
-                            self.sendTTS("취향을 먼저 선택해주세요");
-                        } 
-                        console.log('[DetailFavor] 다음 페이지');
-                        break;
-                    default:
-                        break;
-                }
-            };
-        },
         getUserVoice() {
             this.options={};
             this.options.voicemsg= this.info_text;
@@ -194,16 +215,6 @@ export default {
                 }; 
             });
         },
-        setVoiceFlag() {
-            var self = this;
-            this.options={};
-            this.options.flag=1; //  ContainerApp 에서 음성선택번호 및 확인/취소 수신
-            gigagenie.voice.setKwsVoiceRecv (this.options,function(result_cd,result_msg,extra){
-                if(result_cd===200){
-                    self.getUserSelectedNum(extra);
-                };
-            });
-        }, 
         getUserSelectedNum(event) {
             var self = this;
             gigagenie.voice.onSelectedIndex=function(event){
@@ -247,25 +258,6 @@ export default {
         goDetailGroup() {
             var self = this;
             setTimeout(function() {self.$router.push('/detail/group')}, 1000);
-            // this.$router.push({path: '/detail/group'});
-        },
-        pageMove(id) { // 기가지니할때는 없애기!!
-            // switch(id) {
-            //     case 1:
-            //         this.$router.push({path: '/detail/favor'});
-            //         break;
-            //     case 2:
-            //         this.$router.push({path: '/detail/group'});
-            //         break;
-            //     case 3:
-            //         this.$router.push({path: '/detail/price'});
-            //         break;
-            //     case 4:
-            //         this.$router.push({path: '/detail/date'});
-            //         break;
-            //     default:
-            //         break;
-            // }
         }
     }
 }
