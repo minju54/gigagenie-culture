@@ -117,7 +117,6 @@ export default {
     created() {
         this.init();
         this.setCategoryDate(); // 화면에 날짜 목록 바인딩
-        // this.sendTTS();
         this.getUserVoice();
     },
     methods: {
@@ -150,6 +149,9 @@ export default {
                         } 
                         console.log('[DetailDate] 다음 페이지');
                         break;
+                    case 'MainMenu':
+                        self.sendTTS("홈화면으로 이동합니다");
+                        self.$router.replace({path: '/'});
                     default:
                         break;
                 }
@@ -317,24 +319,6 @@ export default {
         goResultPage() {
             var self = this;
             setTimeout(function() {self.$router.push('/resultMain')}, 1000);
-        },
-        pageMove(id) { // 기가지니할때는 없애기!!
-            // switch(id) {
-            //     case 1:
-            //         this.$router.push({path: '/detail/favor'});
-            //         break;
-            //     case 2:
-            //         this.$router.push({path: '/detail/group'});
-            //         break;
-            //     case 3:
-            //         this.$router.push({path: '/detail/price'});
-            //         break;
-            //     case 4:
-            //         this.$router.push({path: '/detail/date'});
-            //         break;
-            //     default:
-            //         break;
-            // }
         }
     }
 }

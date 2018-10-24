@@ -94,6 +94,12 @@ export default {
                     console.log('[ResultToday] gigagenie init error: '+ result_cd+ ", " + result_msg);
                 }
             });
+
+            var thumbnail_img = document.getElementById('thumbnail');
+            if(thumbnail_img && thumbnail_img.style) {
+                thumbnail_img.style.height = '390px';
+                thumbnail_img.style.width = '310px';
+            }
         },
         voiceSelectMode() {
             var self = this;
@@ -141,6 +147,9 @@ export default {
                             self.sendTTS("북마크에 존재하지않는 정보입니다.");
                         }
                         break;
+                    case 'MainMenu':
+                        self.sendTTS("홈화면으로 이동합니다");
+                        self.$router.replace({path: '/'});
                     default:
                         break;
                 }
@@ -257,12 +266,12 @@ export default {
                     content = content.replace(/&nbsp;/gi, "");
                     content = content.replace(/&bull/gi, "");
                     if (content.length > 15) {
-                    content = content.substr(0, 500);
+                    content = content.substr(0, 450);
                     this.show_contents = content;
                     } else {
                     origin_content = origin_content.split('alt="')[1];
                     origin_content = origin_content.split('"')[0];
-                    origin_content = origin_content.substr(0, 500);
+                    origin_content = origin_content.substr(0, 450);
                     this.show_contents = origin_content;
                     }
                 },

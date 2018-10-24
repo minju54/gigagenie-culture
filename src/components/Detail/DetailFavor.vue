@@ -132,7 +132,7 @@ export default {
             gigagenie.voice.onRequestClose=function(){
                 var options={};
                 gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
-                    this.stopTTS();
+                    self.stopTTS();
                 });
             };
 
@@ -159,6 +159,14 @@ export default {
                     case 52:
                         self.selectFavor(4);
                         break;
+                }
+            }
+
+            gigagenie.voice.onActionEvent=function(extra){
+                console.log('[DetailFavor]발화 문장: ' + extra.uword + " " + extra.actioncode);
+                if (extra.actioncode === "MainMenu") {
+                    self.sendTTS("홈화면으로 이동합니다");
+                    self.$router.replace({path: '/'});
                 }
             }
         },

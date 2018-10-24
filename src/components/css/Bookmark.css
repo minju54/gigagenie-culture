@@ -17,6 +17,23 @@
     width: 190px;
 }
 
+#no-result-text-top {
+    color: #ffffff;
+    font-size: 25px;
+    padding-top: 50px;
+}
+
+#no-result-text-bottom {
+    color: #ffffff;
+    font-size: 25px;
+}
+
+#not-found {
+    width: 100px;
+    height: 100px;
+    margin-top: 150px;
+}
+
 #idx-circle {
     width: 30px;
     height: 30px;
@@ -25,7 +42,7 @@
 }
 
 #content-row {
-    margin-top: 30px;
+    margin-top: 5px;
 }
 
 #bookmark-item{
@@ -59,7 +76,7 @@
 
 #thumbnail {
     width: 270px;
-    height: 300px;
+    height: 310px;
     border-radius: 10px;
     margin-bottom: 15px;
 }
@@ -73,6 +90,11 @@
 #c-text {
     font-size: 19px;
     text-align: left;
+    display: inline-block; 
+    width: 350px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
 }
 #delete-button {
     background:transparent;
@@ -93,4 +115,10 @@
 #show-title{
     font-size: 25px;
     padding-top: 10px;
+    display: inline-block; 
+    width: 400px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+
 }

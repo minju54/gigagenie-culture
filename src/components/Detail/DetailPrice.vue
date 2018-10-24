@@ -99,7 +99,7 @@ export default {
             gigagenie.voice.onRequestClose=function(){
                 var options={};
                 gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
-                    this.stopTTS();
+                    self.stopTTS();
                 });
             };
 
@@ -141,6 +141,13 @@ export default {
                         self.selectPrice(3);
                         break;
                 }
+            }
+
+            gigagenie.voice.onActionEvent=function(extra) {
+                if (extra.actioncode === 'MainMenu') {
+                    self.sendTTS("홈화면으로 이동합니다");
+                    self.$router.replace({path: '/'});
+                } 
             }
         },
         sendTTS(msg) {

@@ -98,16 +98,46 @@ export default {
                 switch(event){
                     case 'prevPage':
                         console.log('[MainContent] 이전 페이지');
-                        self.sendTTS("문화알리미를 종료합니다");
+                        self.sendTTS("이전 페이지가 없습니다.");
                         break;
                     case 'nextPage':
                         self.start();
                         console.log('[MainContent] 다음 페이지');
                         break;
+                    
                     default:
                         break;
                 }
             };
+
+            gigagenie.voice.onActionEvent=function(extra) {
+                if (extra.actioncode === 'MainMenu') {
+                    self.sendTTS("홈화면으로 이동합니다");
+                    self.$router.replace({path: '/'});
+                } 
+            }
+
+            gigagenie.voice.onRequestClose=function(){
+                var options={};
+                gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
+                    self.stopTTS();
+                });
+            };
+        },
+        stopTTS() {
+        // TTS중단, 음성인식 중지 
+            var options={};
+            gigagenie.voice.stopTTS(options,function(result_cd, result_msg, extra) {
+                if (result_cd==200) {
+                    // console.log("음성인식 중단 성공");
+                }
+                else if (result_cd==404) {
+                    console.log("음성인식 실행 중이 아님");
+                }
+                else {
+                    console.log("음성인식 중단 실패: " + result_msg);
+                }
+            });
         },
         start() {
             var self = this;

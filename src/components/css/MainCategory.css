@@ -3,7 +3,7 @@
     padding-top: 50px;
 }
 
-#div-select, #div-today, #div-book{
+/* #div-select, #div-today, #div-book{
     background: transparent; 
     background-color: rgba(0, 0, 0, 0.3); 
     filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); 
@@ -31,19 +31,19 @@
     padding: 20px;
     box-shadow: 5px 5px 3px #000000;
     border-radius: 50px 0px 0px 0px ;
-}
+} */
 #btn-select {
     background: transparent; 
-    background-color: rgba(0, 0, 0, 0.6); 
+    background-color: rgba( 255, 255, 255, 0.3); 
     border: none;
     width: 545px;
     height: 540px;
     box-shadow: 5px 5px 3px #000000;
     border-radius: 50px 0px 0px 0px ;
 }
-#btn-today, #btn-book {
+#btn-today{
     background: transparent; 
-    background-color: rgba(0, 0, 0, 0.6); 
+    background-color: rgba( 255, 255, 255, 0.3); 
     border: none;
     width: 545px;
     height: 260px;
@@ -53,25 +53,49 @@
 
 #btn-book {
     margin-top: 20px;
+    background: transparent; 
+    /* background-color: rgba(0, 0, 0, 0.6);  */
+    background-color: rgba( 255, 255, 255, 0.3); 
+    border: none;
+    width: 545px;
+    height: 260px;
+    box-shadow: 5px 5px 3px #000000;
+    border-radius: 50px 0px 0px 0px ;
+}
+#btn-select-click {
+    background: transparent; 
+    background-color: rgba(0, 0, 0, 0.6);
+    border : 5px solid rgb(221, 182, 83);
+    width: 545px;
+    height: 540px;
+    box-shadow: 5px 5px 3px #000000;
+    border-radius: 50px 0px 0px 0px ;
+}
+#btn-today-click {
+    background: transparent; 
+    background-color: rgba(0, 0, 0, 0.6);
+    border : 5px solid rgb(221, 182, 83);
+    width: 545px;
+    height: 260px;
+    box-shadow: 5px 5px 3px #000000;
+    border-radius: 50px 0px 0px 0px ;
+}
+
+#btn-book-click {
+    margin-top: 20px;
+    background: transparent; 
+    background-color: rgba(0, 0, 0, 0.6);
+    border : 5px solid rgb(221, 182, 83);
+    width: 545px;
+    height: 260px;
+    box-shadow: 5px 5px 3px #000000;
+    border-radius: 50px 0px 0px 0px ;
 }
 
 #btn-select:focus, #btn-today:focus, #btn-book:focus {
-    /* background-color: rgba(255, 255, 255, 0.2);  */
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.6);
     border : 5px solid rgb(221, 182, 83);
 }
-/* #div-select {
-    height: 540px;
-}
-
-#div-today {
-    height: 260px;
-}
-
-#div-book {
-    margin-top: 20px;
-    height: 260px;
-} */
 
 #text-title-top {
     font-size: 25px;

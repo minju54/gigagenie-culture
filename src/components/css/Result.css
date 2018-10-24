@@ -77,8 +77,8 @@
 }
 
 #text-content-show {
-    display: inline-block;
-    width: 863px;
+    /* display: inline-block; */
+    width: 840px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -86,7 +86,7 @@
     text-align: left;
     font-size: 20px;
     margin-left: 70px;
-    height: 224px;
+    height: 210px;
 }
 
 #text-detail {

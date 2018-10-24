@@ -8,7 +8,7 @@
                 
                 <div id="bookmark-item" >
                     <p id="show-title"><b>{{p.title}}</b></p>  
-                    <img id="thumbnail" v-bind:src="p.thumbnail" width="270px" height="300px">
+                    <img id="thumbnail" v-bind:src="p.thumbnail" width="270px" height="310px">
                     <div class="row">
                         <div class="col-sm-3" id="t-text"><b>날짜</b></div>
                         <div class="col-sm-9" id="c-text">{{p.date}}</div>
@@ -35,7 +35,7 @@
             <button :disabled="pageNum === 0" @click="prevPage" id="prev-button">
                 <img src="../../assets/left-arrow.png" id="arrow-img">
             </button>
-            <span id="page-count">{{ pageNum + 1 }} / {{ pageCount }} 페이지</span>
+            <span id="page-count">{{ pageNum + 1 }} / {{ pageCount }} 목록</span>
             <button :disabled="pageNum >= pageCount - 1" @click="nextPage" id="next-button">
             <img src="../../assets/right-arrow.png" id="arrow-img">
             </button>
@@ -64,6 +64,11 @@ export default {
     },
     updated() {
         this.init();
+        var thumbnail_img = document.getElementById('thumbnail');
+        if(thumbnail_img && thumbnail_img.style) {
+            thumbnail_img.style.height = '310px';
+            thumbnail_img.style.width = '270px';
+        }
     },
     watch: {
         // listArray, pageSize 바껴야함
@@ -98,10 +103,13 @@ export default {
                     self.sendTTS("북마크에 이미 추가되었습니다.");
                     break;
                 case 'DeleteBookmark':
-                    
                     var idx = '';
-                    idx = extra.parameter['NE-B-Ordinal'].toString();
-                    idx = idx.replace("번", "");
+                    if (extra.parameter['NE-B-Ordinal'] == "") {
+                        idx = extra.parameter['NE-B-Nation'].toString().substr(0, 1);
+                    } else {
+                        idx = extra.parameter['NE-B-Ordinal'].toString();
+                        idx = idx.replace("번", "");
+                    }
                     if (isNaN(idx) == true) { // 문자
                         if (idx == "일") {
                             idx = 1;
@@ -113,6 +121,24 @@ export default {
                     } 
                     idx -= 1; // index는 0부터 시작
                     self.deleteBookmark(idx);
+                    break;
+                case 'MainMenu':
+                    self.sendTTS("홈화면으로 이동합니다");
+                    self.$router.replace({path: '/'});
+                    break;
+                case 'PreBookmarkList':
+                    if (self.pageNum === 0) {
+                        self.sendTTS("이전 목록이 없습니다");
+                    } else  {
+                        self.prevPage();
+                    }
+                    break;
+                case 'NextBookmarkList':
+                    if (pageNum >= pageCount - 1) {
+                        self.sendTTS("다음 목록이 없습니다");
+                    } else {
+                        self.nextPage();
+                    }
                     break;
                 default:
                     break;

@@ -1,10 +1,17 @@
 <template>
     <section>
         <main-top></main-top>
-        <div id="body">
+        <div id="body" v-if="listEmpty===1">
             <div id="title-top">북마크 목록</div>
             <paginated-list :list-array="pageArray" />
-        </div>
+        </div> 
+        <div id="body" v-else>
+            <div id="title-top">북마크 목록</div>
+            <img src="../../assets/not-found.png" id="not-found">
+            <p id="no-result-text-top">죄송합니다. 선택하신 카테고리에 해당하는 정보가 없습니다.</p>
+            <p id="no-result-text-bottom">다른 카테고리로 선택해보세요.</p>
+        </div> 
+        
         <main-footer></main-footer>
     </section>
 </template>
@@ -26,7 +33,8 @@ export default {
             info_text: "북마크 목록입니다.",
             bookmarkListJson: "",
             bookmarkListArr : "",
-            pageArray: []
+            pageArray: [],
+            listEmpty: 0
         }
     },
     created() {
@@ -100,6 +108,11 @@ export default {
                         //console.log('extra.data: ' + extra.data);
                         console.log('[BookmarkMain]bookmark length: ' + Object.keys(self.bookmarkListJson).length);
                         //console.log('index 0 : ' + JSON.stringify(self.bookmarkListJson[0]) + self.bookmarkListJson[0].title);
+                        if ( Object.keys(self.bookmarkListJson).length > 0) {
+                            self.listEmpty = 1;
+                        } else {
+                            self.listEmpty = 0;
+                        }
                         self.sendTTS(self.info_text + " 총[IS]" + Object.keys(self.bookmarkListJson).length + "[/IS]건의 목록이 있습니다.");
                         self.pageArray = self.bookmarkListJson;
                         $.each(self.bookmarkListJson, function (index, data) {

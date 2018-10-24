@@ -106,6 +106,12 @@ export default {
               console.log('gigagenie init error: '+ result_cd+ ", " + result_msg);
           }
       });
+
+      var thumbnail_img = document.getElementById('thumbnail');
+      if(thumbnail_img && thumbnail_img.style) {
+          thumbnail_img.style.height = '390px';
+          thumbnail_img.style.width = '310px';
+      }
     },
     voiceSelectMode() {
       var self = this;
@@ -116,7 +122,7 @@ export default {
               console.log('[ResultMain] 이전 페이지');
               break;
             case 'nextPage':
-              sendTTS('다음 페이지가 없습니다.');
+              self.sendTTS('다음 페이지가 없습니다.');
               console.log('[ResultMain] 다음 페이지');
               break;
             default:
@@ -126,7 +132,7 @@ export default {
       gigagenie.voice.onRequestClose=function(){
         var options={};
         gigagenie.voice.svcFinished(options,function(result_cd,result_msg,extra){
-            this.stopTTS();
+            self.stopTTS();
         });
       };
 
@@ -149,6 +155,9 @@ export default {
                       self.sendTTS("북마크에 존재하지않는 정보입니다.");
                   }
                   break;
+              case 'MainMenu':
+                self.sendTTS("홈화면으로 이동합니다");
+                self.$router.replace({path: '/'});
               default:
                   break;
           }
@@ -220,6 +229,7 @@ export default {
     },
 
     getShowSeqNum() {
+      var self = this;
       if (this.retry == 0) { // 탐색 결과가 없는 경우 dt_end를 한달 마지막 날짜로 바꿔줌
         this.retry = 1; // 한번만 탐색하고 그만~
         this.infoMatched = 0;
@@ -249,16 +259,17 @@ export default {
 
           console.log('API 1번 seqArray.length: ' + seqArray.length);
           if (seqArray.length == 0) { // 결과가 없는 경우
-            this.dateMatched = 0;
+            self.dateMatched = 0;
             if (this.retry == 0) {  // endDate 를 이번달 말까지 늘려서 재탐색   
               this.getShowSeqNum(); // 한번만 호출하고 그 다음에 빠져나가기! ex) 제주 - 무용을 선택했을때 결과 없어서 무한루프
             } else {
               this.makeInfoMsg();
-              this.infoMatched = 0;
+              self.infoMatched = 0;
               console.log('이번달 말까지 탐색했을때 해당하는 정보가 없습니다.');
             }
           } else {
-            this.infoMatched = 1;
+            self.infoMatched = 1;
+            self.dateMatched = 1;
             console.log('정보 발견!');
             this.getDetailResult(seqArray);
           }
@@ -268,6 +279,7 @@ export default {
     },
 
     getDetailResult(seqArray) {
+      var self = this;
       var detailList = [];
       var idx;
       for (idx in seqArray) {
@@ -280,24 +292,26 @@ export default {
       axios.all(detailList).then(axios.spread((...resArray) => {
         // 받아온 리스트 중에서 무료 / 유료 따로 뽑아내기
         for (idx in resArray) {
-          var detailData = resArray[idx].data;
+          var detailData = '';
+          detailData = resArray[idx].data;
           var priceValue = $(detailData).find("price").text();
           var area = $(detailData).find("area").text();
 
           if (this.$store.getters.getPrice === "nothing") { // 금액 상관없으면 바로 row[0] 가져오고 break
-            console.log('seqNum: ', $(detailData).find("seq").text());
+            console.log('nothing seqNum: ', $(this).find("seq").text());
+            self.priceMatched = 1;
             break;
           } else {
             if (priceValue.match(/무료/)) {
               if (this.$store.getters.getPrice === "free") {
-                console.log('seqNum: ', $(detailData).find("seq").text());
-                this.priceMatched = 1;
+                console.log('free seqNum: ', $(this).find("seq").text());
+                self.priceMatched = 1;
                 break;
               }
             } else {
               if (this.$store.getters.getPrice === "pay") {
-                console.log('seqNum: ', $(detailData).find("seq").text());
-                this.priceMatched = 1;
+                console.log('pay seqNum: ', $(this).find("seq").text());
+                self.priceMatched = 1;
                 break;
               }
             }
@@ -305,8 +319,8 @@ export default {
         } // end of for
         
         // 화면에 데이터 뿌리기 (썸네일, 타이틀, 가격, 문의, 장소)
-        this.showSeqNum = $(detailData).find("seq").text();
-        console.log('[ResultMain]seqNum: ', this.showSeqNum);
+        self.showSeqNum = $(detailData).find("seq").text();
+        console.log('[ResultMain]seqNum: ', self.showSeqNum);
         this.show_thumbnail = $(detailData).find("imgUrl").text();
         this.show_title = $(detailData).find("title").text();
         this.show_price = $(detailData).find("price").text();
@@ -333,12 +347,12 @@ export default {
         content = content.replace(/&nbsp;/gi, "");
         content = content.replace(/&bull/gi, "");
         if (content.length > 15) {
-          content = content.substr(0, 500);
+          content = content.substr(0, 450);
           this.show_contents = content;
         } else {
           origin_content = origin_content.split('alt="')[1];
           origin_content = origin_content.split('"')[0];
-          origin_content = origin_content.substr(0, 500);
+          origin_content = origin_content.substr(0, 450);
           this.show_contents = origin_content;
         }
         // this.sendTTS(msg);
@@ -355,6 +369,7 @@ export default {
       가격정보 X 날짜정보 O : 선택하신 가격대에 해당하는 정보가 없어 00 을 추천해드려요
       가격정보 X 날짜정보 X : 선택하신 가격대와 해당하는 날짜에 해당하는 정보가 없습니다. 대신 00을 추천해드려요
       */  
+      console.log('[ResultMain]infoMatched: ' + this.infoMatched + ", priceMatched: " +  this.priceMatched + ", dateMatched: " + this.dateMatched);
       var msg = '';
       if (this.infoMatched == 0) { // 아예 그 장르의 문화 정보가 없는 경우
         msg = "죄송합니다. 선택하신 카테고리에 해당하는 정보가 없습니다.";
