@@ -104,12 +104,14 @@ export default {
                     break;
                 case 'DeleteBookmark':
                     var idx = '';
-                    if (extra.parameter['NE-B-Ordinal'] == "") {
-                        idx = extra.parameter['NE-B-Nation'].toString().substr(0, 1);
-                    } else {
-                        idx = extra.parameter['NE-B-Ordinal'].toString();
-                        idx = idx.replace("번", "");
-                    }
+                    //var sentence = '';
+                    idx = extra.uword.substr(0,1);
+                    // if (extra.parameter['NE-B-Ordinal'] == "") {
+                    //     idx = extra.parameter['NE-B-Nation'].toString().substr(0, 1);
+                    // } else {
+                    //     idx = extra.parameter['NE-B-Ordinal'].toString();
+                    //     idx = idx.replace("번", "");
+                    // }
                     if (isNaN(idx) == true) { // 문자
                         if (idx == "일") {
                             idx = 1;
@@ -120,21 +122,25 @@ export default {
                         }
                     } 
                     idx -= 1; // index는 0부터 시작
-                    self.deleteBookmark(idx);
+                    if (idx < self.listArray.length) {
+                        self.deleteBookmark(idx);
+                    } else {
+                        console.log('[PaginatedList] idx범위 초과');
+                    }
                     break;
                 case 'MainMenu':
                     self.sendTTS("홈화면으로 이동합니다");
                     self.$router.replace({path: '/'});
                     break;
-                case 'PreBookmarkList':
+                case 'PreList':
                     if (self.pageNum === 0) {
                         self.sendTTS("이전 목록이 없습니다");
                     } else  {
                         self.prevPage();
                     }
                     break;
-                case 'NextBookmarkList':
-                    if (pageNum >= pageCount - 1) {
+                case 'NextList':
+                    if (self.pageNum >= pageCount - 1) {
                         self.sendTTS("다음 목록이 없습니다");
                     } else {
                         self.nextPage();

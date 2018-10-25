@@ -13959,7 +13959,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-right: 255px;\n}\n\n#result-text {\n    color: #ffffff;\n    padding-top: 13px;\n    padding-bottom: 13px;\n    padding-left: 37px;\n    padding-right: 30px;\n    text-align: left;\n    font-size: 25px;\n    font-weight: bold;\n    /* border : 8px rgb(221, 182, 83) solid; */\n    background: rgba(221, 182, 83, 0.8);\n    border-radius: 10px;\n    width: 160px;\n}\n\n#result-body {\n    border-radius: 20px;\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.5); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    zoom: 1;\n    padding-left: 20px;\n    padding-right: 20px;\n    padding-top: 20px;\n    padding-bottom: 10px;\n    margin-top: 20px;\n    height: 584px;\n}\n\n#no-result-body {\n    height: 665px;\n}\n\n#thumbnail {\n    width: 300px;\n    height: 390px;\n    border-radius: 10px;\n}\n\n#no-result-text-top {\n    color: #ffffff;\n    font-size: 25px;\n    padding-top: 50px;\n}\n\n#no-result-text-bottom {\n    color: #ffffff;\n    font-size: 25px;\n}\n\n#not-found {\n    width: 100px;\n    height: 100px;\n    margin-top: 150px;\n}\n\n#text-content-row {\n    margin-bottom: 10px;\n}\n\n#text-title {\n    color:  rgb(221, 182, 83);\n    font-size: 22px;\n    text-align: center;\n}\n\n#text-content {\n    text-align: left;\n    font-size: 23px;\n    padding-left: 10px;\n}\n\n#text-content-show {\n    /* display: inline-block; */\n    width: 840px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: normal;\n    text-align: left;\n    font-size: 20px;\n    margin-left: 70px;\n    height: 210px;\n}\n\n#text-detail {\n    text-align: left;\n    font-size: 22px;\n    margin-left: 40px;\n    padding-left: 40px;\n    margin-bottom: 10px;\n    color:  rgb(221, 182, 83);\n    border : 3px rgb(221, 182, 83) solid;\n    border-radius: 20px;\n    width: 155px;\n}\n#show-title {\n    margin-bottom: 20px;\n    text-align: center;\n    font-size: 25px;\n}\n\n#div-left {\n    padding-left: 20px;\n    padding-right: 20px;\n}\n\n#btn-bookmark {\n    background-color: rgb(117, 115, 115);\n    border: none;\n    color: white;\n    padding-top: 10px;\n    padding-bottom: 10px;\n    padding-left: 40px;\n    padding-right: 40px;\n    text-align: center;\n    font-size: 17px;\n    border-radius: 10px;\n    margin-top: 20px;\n    margin-bottom: 30px;\n}\n\n#btn-bookmark-active { \n    background-color: rgb(221, 182, 83);\n    border: none;\n    color: white;\n    padding-top: 10px;\n    padding-bottom: 10px;\n    padding-left: 40px;\n    padding-right: 40px;\n    text-align: center;\n    font-size: 17px;\n    border-radius: 10px;\n    margin-top: 20px;\n    margin-bottom: 30px;\n}\n\n", ""]);
+exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-right: 255px;\n}\n\n#result-text {\n    color: #ffffff;\n    padding-top: 13px;\n    padding-bottom: 13px;\n    padding-left: 37px;\n    padding-right: 30px;\n    text-align: left;\n    font-size: 25px;\n    font-weight: bold;\n    /* border : 8px rgb(221, 182, 83) solid; */\n    background: rgba(221, 182, 83, 0.8);\n    border-radius: 10px;\n    width: 160px;\n}\n\n#result-body {\n    border-radius: 20px;\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.5); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    zoom: 1;\n    padding-left: 20px;\n    padding-right: 20px;\n    padding-top: 20px;\n    padding-bottom: 10px;\n    margin-top: 20px;\n    height: 584px;\n}\n\n#no-result-body {\n    height: 665px;\n}\n\n#thumbnail {\n    width: 300px;\n    height: 390px;\n    border-radius: 10px;\n}\n\n#no-result-text-top {\n    color: #ffffff;\n    font-size: 25px;\n    padding-top: 50px;\n}\n\n#no-result-text-bottom {\n    color: #ffffff;\n    font-size: 25px;\n}\n\n#not-found {\n    width: 100px;\n    height: 100px;\n    margin-top: 150px;\n}\n\n#text-content-row {\n    margin-bottom: 10px;\n}\n\n#text-title {\n    color:  rgb(221, 182, 83);\n    font-size: 22px;\n    text-align: center;\n}\n\n#text-content {\n    text-align: left;\n    font-size: 23px;\n    padding-left: 10px;\n}\n\n#text-content-show {\n    /* display: inline-block; */\n    width: 840px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: normal;\n    text-align: left;\n    font-size: 20px;\n    margin-left: 70px;\n    height: 220px;\n}\n\n#text-detail {\n    text-align: left;\n    font-size: 22px;\n    margin-left: 40px;\n    padding-left: 40px;\n    margin-bottom: 10px;\n    color:  rgb(221, 182, 83);\n    border : 3px rgb(221, 182, 83) solid;\n    border-radius: 20px;\n    width: 155px;\n}\n#show-title {\n    margin-bottom: 20px;\n    text-align: center;\n    font-size: 25px;\n}\n\n#div-left {\n    padding-left: 20px;\n    padding-right: 20px;\n}\n\n#btn-bookmark {\n    background-color: rgb(117, 115, 115);\n    border: none;\n    color: white;\n    padding-top: 10px;\n    padding-bottom: 10px;\n    padding-left: 40px;\n    padding-right: 40px;\n    text-align: center;\n    font-size: 17px;\n    border-radius: 10px;\n    margin-top: 20px;\n    margin-bottom: 30px;\n}\n\n#btn-bookmark-active { \n    background-color: rgb(221, 182, 83);\n    border: none;\n    color: white;\n    padding-top: 10px;\n    padding-bottom: 10px;\n    padding-left: 40px;\n    padding-right: 40px;\n    text-align: center;\n    font-size: 17px;\n    border-radius: 10px;\n    margin-top: 20px;\n    margin-bottom: 30px;\n}\n\n", ""]);
 
 // exports
 
@@ -14235,7 +14235,6 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
             seqArray.push($(this).text());
           });
 
-          console.log('API 1번 seqArray.length: ' + seqArray.length);
           if (seqArray.length == 0) {
             // 결과가 없는 경우
             self.dateMatched = 0;
@@ -14278,27 +14277,29 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
         }
 
         // 받아온 리스트 중에서 무료 / 유료 따로 뽑아내기
+
         for (idx in resArray) {
           var detailData = '';
           detailData = resArray[idx].data;
           var priceValue = $(detailData).find("price").text();
           var area = $(detailData).find("area").text();
 
+          self.showSeqNum = seqArray[idx];
           if (_this2.$store.getters.getPrice === "nothing") {
             // 금액 상관없으면 바로 row[0] 가져오고 break
-            console.log('nothing seqNum: ', $(_this2).find("seq").text());
+            console.log('nothing seqNum: ', self.showSeqNum);
             self.priceMatched = 1;
             break;
           } else {
             if (priceValue.match(/무료/)) {
               if (_this2.$store.getters.getPrice === "free") {
-                console.log('free seqNum: ', $(_this2).find("seq").text());
+                console.log('free seqNum: ', self.showSeqNum);
                 self.priceMatched = 1;
                 break;
               }
             } else {
               if (_this2.$store.getters.getPrice === "pay") {
-                console.log('pay seqNum: ', $(_this2).find("seq").text());
+                console.log('pay seqNum: ', self.showSeqNum);
                 self.priceMatched = 1;
                 break;
               }
@@ -14307,7 +14308,7 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
         } // end of for
 
         // 화면에 데이터 뿌리기 (썸네일, 타이틀, 가격, 문의, 장소)
-        self.showSeqNum = $(detailData).find("seq").text();
+        // self.showSeqNum = $(detailData).find("seq").text();
         console.log('[ResultMain]seqNum: ', self.showSeqNum);
         _this2.show_thumbnail = $(detailData).find("imgUrl").text();
         _this2.show_title = $(detailData).find("title").text();
@@ -14482,7 +14483,6 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
     },
     getBookMarkState: function getBookMarkState() {
       // 사용자가 이미 북마크한 정보인지 알아본다.
-      console.log('getBookMarkState enter!!!! ');
       var self = this;
       this.options = {};
       this.options.namespace = 'bookmark';
@@ -15278,12 +15278,14 @@ module.exports = function (it) {
                         break;
                     case 'DeleteBookmark':
                         var idx = '';
-                        if (extra.parameter['NE-B-Ordinal'] == "") {
-                            idx = extra.parameter['NE-B-Nation'].toString().substr(0, 1);
-                        } else {
-                            idx = extra.parameter['NE-B-Ordinal'].toString();
-                            idx = idx.replace("번", "");
-                        }
+                        //var sentence = '';
+                        idx = extra.uword.substr(0, 1);
+                        // if (extra.parameter['NE-B-Ordinal'] == "") {
+                        //     idx = extra.parameter['NE-B-Nation'].toString().substr(0, 1);
+                        // } else {
+                        //     idx = extra.parameter['NE-B-Ordinal'].toString();
+                        //     idx = idx.replace("번", "");
+                        // }
                         if (isNaN(idx) == true) {
                             // 문자
                             if (idx == "일") {
@@ -15295,21 +15297,25 @@ module.exports = function (it) {
                             }
                         }
                         idx -= 1; // index는 0부터 시작
-                        self.deleteBookmark(idx);
+                        if (idx < self.listArray.length) {
+                            self.deleteBookmark(idx);
+                        } else {
+                            console.log('[PaginatedList] idx범위 초과');
+                        }
                         break;
                     case 'MainMenu':
                         self.sendTTS("홈화면으로 이동합니다");
                         self.$router.replace({ path: '/' });
                         break;
-                    case 'PreBookmarkList':
+                    case 'PreList':
                         if (self.pageNum === 0) {
                             self.sendTTS("이전 목록이 없습니다");
                         } else {
                             self.prevPage();
                         }
                         break;
-                    case 'NextBookmarkList':
-                        if (pageNum >= pageCount - 1) {
+                    case 'NextList':
+                        if (self.pageNum >= pageCount - 1) {
                             self.sendTTS("다음 목록이 없습니다");
                         } else {
                             self.nextPage();
@@ -16095,7 +16101,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "#content{\n    /* background-color:rgb(248, 246, 244); */\n    padding-top: 30px;\n    padding-bottom: 30px;\n}\n\n#yellow-circle {\n    background-color: rgb(221, 182, 83, 0.7);\n    width: 150px;\n    height: 150px;\n    border-radius:50%;\n    color: #ffffff;\n    position: relative;\n}\n#grey-circle {\n    background-color: rgb(102, 102, 102);\n    opacity: 0.8;\n    width: 130px;\n    height: 130px;\n    border-radius:50%;\n    color: rgba(255, 255, 255);\n    position: relative; \n}\n#white-boder-circle {\n    width: 170px;\n    height: 170px;\n    border: 3px solid #ffffff;\n    border-radius:50%;\n    color: #ffffff;\n    position: relative;\n    padding: 20px;\n}\n#yellow-circlem, #circle-text {\n    margin: 0;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    margin-right: -50%;\n    transform: translate(-50%, -50%)\n}\n\n#top-circle-div {\n    display: flex;\n    justify-content: center;\n}\n\n#middle-circle-div {\n    margin-left: 150px;\n    margin-top: 30px;\n}\n\n#bottom-circle-div {\n    margin-left: 350px;\n    margin-top: 30px;\n}\n\n#text-top {\n    color: #ffffff;\n    font-size: 25px;\n    padding-top: 70px;\n}\n\n#text-middle {\n    color: #ffffff;\n    font-size: 25px;\n    padding-top: 10px;\n    padding-bottom: 40px;\n}\n\n#text-bottom {\n    color: rgb(221, 182, 83);\n    font-size: 25px;\n    margin-bottom: 50px;\n    \n}\n\n#text-start{\n    font-size: 28px;\n    margin-top: 30px;\n    /* padding-bottom: 100px; */\n}\n\n#start-arrow {\n    margin-top: 80px;\n    margin-bottom: 20px;\n}\n\n#category-img {\n    width: 110px;\n    height: 110px;\n}\n\n#category-div {\n    margin-right: 35px;\n}", ""]);
+exports.push([module.i, "#content{\n    /* background-color:rgb(248, 246, 244); */\n    padding-top: 30px;\n    padding-bottom: 30px;\n}\n\n#yellow-circle {\n    background-color: rgb(221, 182, 83, 0.7);\n    width: 150px;\n    height: 150px;\n    border-radius:50%;\n    color: #ffffff;\n    position: relative;\n}\n#grey-circle {\n    background-color: rgb(102, 102, 102);\n    opacity: 0.8;\n    width: 130px;\n    height: 130px;\n    border-radius:50%;\n    color: rgba(255, 255, 255);\n    position: relative; \n}\n#white-boder-circle {\n    width: 170px;\n    height: 170px;\n    border: 3px solid #ffffff;\n    border-radius:50%;\n    color: #ffffff;\n    position: relative;\n    padding: 20px;\n}\n#yellow-circlem, #circle-text {\n    margin: 0;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    margin-right: -50%;\n    transform: translate(-50%, -50%)\n}\n\n#top-circle-div {\n    display: flex;\n    justify-content: center;\n}\n\n#middle-circle-div {\n    margin-left: 150px;\n    margin-top: 30px;\n}\n\n#bottom-circle-div {\n    margin-left: 350px;\n    margin-top: 30px;\n}\n\n#text-top {\n    color: #ffffff;\n    font-size: 25px;\n    padding-top: 70px;\n}\n\n#text-middle {\n    color: #ffffff;\n    font-size: 25px;\n    padding-top: 10px;\n    padding-bottom: 40px;\n}\n\n#text-bottom {\n    color: rgb(221, 182, 83);\n    font-size: 40px;\n    margin-bottom: 28px;\n    margin-left: 470px;\n    width: 200px;\n}\n\n#text-start{\n    font-size: 28px;\n    margin-top: 30px;\n    /* padding-bottom: 100px; */\n}\n\n#start-arrow {\n    margin-top: 80px;\n    margin-bottom: 20px;\n}\n\n#category-img {\n    width: 110px;\n    height: 110px;\n}\n\n#category-div {\n    margin-right: 35px;\n}", ""]);
 
 // exports
 
@@ -16317,7 +16323,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v("간단한 선택을 통해 맞춤 문화 정보를 추천해드려요")]
+          [_vm._v("시작하기")]
         )
       ]),
       _vm._v(" "),

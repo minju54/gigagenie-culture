@@ -257,7 +257,6 @@ export default {
             seqArray.push($(this).text());
           }); 
 
-          console.log('API 1번 seqArray.length: ' + seqArray.length);
           if (seqArray.length == 0) { // 결과가 없는 경우
             self.dateMatched = 0;
             if (this.retry == 0) {  // endDate 를 이번달 말까지 늘려서 재탐색   
@@ -291,35 +290,37 @@ export default {
       var resArray = [];
       axios.all(detailList).then(axios.spread((...resArray) => {
         // 받아온 리스트 중에서 무료 / 유료 따로 뽑아내기
+
         for (idx in resArray) {
           var detailData = '';
           detailData = resArray[idx].data;
           var priceValue = $(detailData).find("price").text();
           var area = $(detailData).find("area").text();
-
+          
+          self.showSeqNum = seqArray[idx];
           if (this.$store.getters.getPrice === "nothing") { // 금액 상관없으면 바로 row[0] 가져오고 break
-            console.log('nothing seqNum: ', $(this).find("seq").text());
+            console.log('nothing seqNum: ', self.showSeqNum);
             self.priceMatched = 1;
             break;
           } else {
             if (priceValue.match(/무료/)) {
               if (this.$store.getters.getPrice === "free") {
-                console.log('free seqNum: ', $(this).find("seq").text());
+                console.log('free seqNum: ', self.showSeqNum);
                 self.priceMatched = 1;
                 break;
-              }
+              } 
             } else {
               if (this.$store.getters.getPrice === "pay") {
-                console.log('pay seqNum: ', $(this).find("seq").text());
+                console.log('pay seqNum: ', self.showSeqNum);
                 self.priceMatched = 1;
                 break;
               }
             }
-          }     
+          }  
         } // end of for
         
         // 화면에 데이터 뿌리기 (썸네일, 타이틀, 가격, 문의, 장소)
-        self.showSeqNum = $(detailData).find("seq").text();
+        // self.showSeqNum = $(detailData).find("seq").text();
         console.log('[ResultMain]seqNum: ', self.showSeqNum);
         this.show_thumbnail = $(detailData).find("imgUrl").text();
         this.show_title = $(detailData).find("title").text();
@@ -491,7 +492,6 @@ export default {
       });
     },
     getBookMarkState() { // 사용자가 이미 북마크한 정보인지 알아본다.
-      console.log('getBookMarkState enter!!!! ' );
       var self = this;
       this.options = {};
       this.options.namespace = 'bookmark';

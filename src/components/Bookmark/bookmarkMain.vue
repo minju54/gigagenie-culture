@@ -8,8 +8,8 @@
         <div id="body" v-else>
             <div id="title-top">북마크 목록</div>
             <img src="../../assets/not-found.png" id="not-found">
-            <p id="no-result-text-top">죄송합니다. 선택하신 카테고리에 해당하는 정보가 없습니다.</p>
-            <p id="no-result-text-bottom">다른 카테고리로 선택해보세요.</p>
+            <p id="no-result-text-top">북마크 목록이 존재하지 않습니다.</p>
+            <p id="no-result-text-bottom">-</p>
         </div> 
         
         <main-footer></main-footer>

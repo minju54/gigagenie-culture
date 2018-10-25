@@ -39,7 +39,7 @@
             </div>
             <div>
                 <img src="../../assets/down-arrow.png" id="start-arrow" width="40px" height="40px">
-                <p id="text-bottom" @click="start()">간단한 선택을 통해 맞춤 문화 정보를 추천해드려요</p>
+                <p id="text-bottom" @click="start()">시작하기</p>
             </div>
             <div>
                 <!-- <h3 id="text-start" @click="start()"><b>"기가지니 시작하기"</b></h3> -->
