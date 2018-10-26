@@ -5,10 +5,10 @@
                 <img id="idx-circle" v-if="idx === 0" src="../../assets/numCircle1.png">
                 <img id="idx-circle" v-else-if="idx === 1" src="../../assets/numCircle2.png">
                 <img id="idx-circle" v-else src="../../assets/numCircle3.png">
-                
+                <!-- <button id="delete-button"><img src="../../assets/dlt-btn.png" id="delete-img" @click="deleteBookmark(idx)"></button> -->
                 <div id="bookmark-item" >
                     <p id="show-title"><b>{{p.title}}</b></p>  
-                    <img id="thumbnail" v-bind:src="p.thumbnail" width="270px" height="310px">
+                    <img id="thumbnail" v-bind:src="p.thumbnail">
                     <div class="row">
                         <div class="col-sm-3" id="t-text"><b>날짜</b></div>
                         <div class="col-sm-9" id="c-text">{{p.date}}</div>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
 
-                <button id="delete-button"><img src="../../assets/delete-button.png" id="delete-img" @click="deleteBookmark(idx)"></button>
+                <button id="delete-button"><img src="../../assets/dlt-btn.png" id="delete-img" @click="deleteBookmark(idx)"></button>
             </div>
             
         </div>
@@ -64,11 +64,11 @@ export default {
     },
     updated() {
         this.init();
-        var thumbnail_img = document.getElementById('thumbnail');
-        if(thumbnail_img && thumbnail_img.style) {
-            thumbnail_img.style.height = '310px';
-            thumbnail_img.style.width = '270px';
-        }
+        // var thumbnail_img = document.getElementById('thumbnail');
+        // if(thumbnail_img && thumbnail_img.style) {
+        //     thumbnail_img.style.height = '310px';
+        //     thumbnail_img.style.width = '270px';
+        // }
     },
     watch: {
         // listArray, pageSize 바껴야함
@@ -76,6 +76,7 @@ export default {
     methods: {
         nextPage () {
             this.pageNum += 1;
+            console.log('nextPage : ' + this.pageNum);
         },
         prevPage () {
             this.pageNum -= 1;
@@ -130,7 +131,7 @@ export default {
                     break;
                 case 'MainMenu':
                     self.sendTTS("홈화면으로 이동합니다");
-                    self.$router.replace({path: '/'});
+                    self.$router.replace({path: '/mainCategory'});
                     break;
                 case 'PreList':
                     if (self.pageNum === 0) {
@@ -140,9 +141,10 @@ export default {
                     }
                     break;
                 case 'NextList':
-                    if (self.pageNum >= pageCount - 1) {
+                    if (self.pageNum >= self.pageCount - 1) {
                         self.sendTTS("다음 목록이 없습니다");
                     } else {
+                        console.log('nextList gogo!!');
                         self.nextPage();
                     }
                     break;
@@ -209,6 +211,7 @@ export default {
             return page;
         },
         paginatedData () {
+            console.log('computed pageNum: '+this.pageNum);
             const start = this.pageNum * this.pageSize,
                 end = start + this.pageSize;
             return this.listArray.slice(start, end);

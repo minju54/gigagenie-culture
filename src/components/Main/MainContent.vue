@@ -113,7 +113,7 @@ export default {
             gigagenie.voice.onActionEvent=function(extra) {
                 if (extra.actioncode === 'MainMenu') {
                     self.sendTTS("홈화면으로 이동합니다");
-                    self.$router.replace({path: '/'});
+                    self.$router.replace({path: '/mainCategory'});
                 } 
             }
 
@@ -142,7 +142,7 @@ export default {
         start() {
             var self = this;
             // setTimeout(function() {self.$router.push('/detail/favor')}, 2000);
-            setTimeout(function() {self.$router.push('/mainCategory')}, 2000);
+            setTimeout(function() {self.$router.push('/mainCategory')}, 1000);
             self.getUserSetting();
         },
         getUserSetting() {

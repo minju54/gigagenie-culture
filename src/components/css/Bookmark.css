@@ -41,6 +41,18 @@
     margin-bottom: 7px;
 }
 
+#delete-button {
+    background:transparent;
+    border: transparent;
+    /* margin-bottom: 10px; */
+    margin-left: 115px; 
+    margin-top: 5px;
+}
+#delete-img{
+    width: 27px;
+    height: 27px;
+}
+
 #content-row {
     margin-top: 5px;
 }
@@ -54,7 +66,7 @@
     zoom: 1;
     border-radius: 10px;
     width: 440px;
-    height: 510px;
+    height: 585px;
 }
 
 #item-col {
@@ -76,9 +88,9 @@
 
 #thumbnail {
     width: 270px;
-    height: 310px;
+    height: 370px;
     border-radius: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 #t-text {
@@ -96,16 +108,7 @@
     overflow: hidden; 
     text-overflow: ellipsis;
 }
-#delete-button {
-    background:transparent;
-    border: transparent;
-    margin-left: 115px;
-    margin-top: 5px;
-}
-#delete-img{
-    width: 27px;
-    height: 27px;
-}
+
 
 #btn-cover{
     margin-top: 20px;

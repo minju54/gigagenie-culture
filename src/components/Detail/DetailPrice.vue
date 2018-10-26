@@ -146,7 +146,7 @@ export default {
             gigagenie.voice.onActionEvent=function(extra) {
                 if (extra.actioncode === 'MainMenu') {
                     self.sendTTS("홈화면으로 이동합니다");
-                    self.$router.replace({path: '/'});
+                    self.$router.replace({path: '/mainCategory'});
                 } 
             }
         },

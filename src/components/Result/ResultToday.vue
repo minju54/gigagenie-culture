@@ -141,7 +141,7 @@ export default {
                         break;
                     case 'DeleteBookmark':
                         if (self.bookmarkState == 1) {
-                            self.sendTTS("북마크에 저장했습니다.");
+                            self.sendTTS("북마크에서 삭제했습니다.");
                             self.checkBookMarkState();
                         } else {
                             self.sendTTS("북마크에 존재하지않는 정보입니다.");
@@ -149,7 +149,12 @@ export default {
                         break;
                     case 'MainMenu':
                         self.sendTTS("홈화면으로 이동합니다");
-                        self.$router.replace({path: '/'});
+                        self.$router.replace({path: '/mainCategory'});
+                        break;
+                    case 'ShowBookmarkList' :
+                        self.sendTTS("북마크 목록으로 이동합니다");
+                        self.$router.replace({path: '/bookmarkMain'});
+                        break;
                     default:
                         break;
                 }
@@ -287,12 +292,15 @@ export default {
             gigagenie.appdata.getKeyData(this.options,function(result_cd,result_msg,extra){
                 switch(result_cd) {
                     case 200:
+                        self.bookmarkState = -1;
                         self.bookmarkListJson = JSON.parse(extra.data);
                         $.each(self.bookmarkListJson, function (index, data) {
-                            //console.log('bookmarkList key ', index)
+                            console.log('bookmarkList key ', index)
                             if (data.seq === self.show_seqNum) {
+                                console.log('[ResultToday]북마크에 존재하는 정보');
                                 self.bookmarkState = 1;
                             } else {
+                                console.log('[ResultToday]북마크에 존재하지 않는 정보');
                                 self.bookmarkState = -1;
                             }
                         })

@@ -5,7 +5,7 @@
             <p id="text-title-top">원하는 번호를 선택해주세요. <b>"기가지니, 1번"</b></p>
             <div class="row">
                 <div class="col-sm-6">
-                    <button id="btn-select-click" @click="pageMove(1)" v-if="selectMode1===true">
+                    <button id="btn-select-click" @click="pageMove(1)" v-if="selectMode===1">
                         <img id="num-circle-left" src="../../assets/numCircle1.png">
                         <p id="text-select"><b>맞춤 추천</b></p>
                         <p id="text-info-top">조건에 따라 맞춤 문화 정보를 추천해드려요 </p>
@@ -19,7 +19,7 @@
                     </button>  
                 </div>
                 <div class="col-sm-6">
-                    <button id="btn-today-click" @click="pageMove(2)" v-if="selectMode2===true">
+                    <button id="btn-today-click" @click="pageMove(2)" v-if="selectMode===2">
                         <img id="num-circle-right" src="../../assets/numCircle2.png">
                         <p id="text-today"><b>오늘의 추천 문화</b></p>
                         <p id="text-info">오늘의 문화 정보를 한가지 추천해드려요</p>
@@ -29,7 +29,7 @@
                         <p id="text-today"><b>오늘의 추천 문화</b></p>
                         <p id="text-info">오늘의 문화 정보를 한가지 추천해드려요</p>
                     </button>
-                    <button id="btn-book-click" @click="pageMove(3)" v-if="selectMode3===true">
+                    <button id="btn-book-click" @click="pageMove(3)" v-if="selectMode===3">
                         <img id="num-circle-right" src="../../assets/numCircle3.png">
                         <p id="text-book"><b>북마크</b></p>
                         <p id="text-info">북마크한 목록을 볼 수 있어요</p>
@@ -72,14 +72,11 @@ export default {
         return {
             options: {},
             info_text: "번호를 말씀해주세요",
-            selectMode1: false,
-            selectMode2: false,
-            selectMode3: false
+            selectMode: ''
         }
     },
     created() {
         this.init();
-        // this.focusEvent();
     },
     components: {
         mainTop: MainTop,
@@ -101,85 +98,6 @@ export default {
                 }
             });
         },
-        focusEvent() {
-            console.log('focusEvent');
-            $('btn-today').removeClass('focus');
-            $(this).removeClass('btn-today-click');
-            $(this).removeClass('btn-select-click');
-            $(this).removeClass('btn-book-click');
-            $(this).removeClass('btn-today');
-            $(this).removeClass('btn-select');
-            $(this).removeClass('btn-book');
-
-            $('btn-today-click').off();
-            $('btn-today').off();
-            $('btn-book').off();
-            $('btn-book-click').off();
-            $('btn-select').off();
-            $('btn-selcect-click').off();
-
-            $('btn-today-click').off('focus');
-            $('btn-today').off('focus');
-            $('btn-book').off('focus');
-            $('btn-book-click').off('focus');
-            $('btn-select').off('focus');
-            $('btn-selcect-click').off('focus');
-
-            // if (this.selectMode1 === true) {
-            //     $('btn-today-click').off('focus');
-            //     $('btn-today').off('focus');
-            //     $('btn-book').off('focus');
-            //     $('btn-book-click').off('focus');
-            // }
-            // if (this.selectMode2 === true) {
-            //     $('btn-select-click').off('focus');
-            //     $(btn-select).off('focus');
-            //     $(btn-book).off('focus');
-            //     $(btn-book-click).off('focus');
-            // }
-            // if (this.selectMode3 === true) {
-            //     $(btn-today-click).off('focus');
-            //     $(btn-today).off('focus');
-            //     $(btn-select).off('focus');
-            //     $(btn-select-click).off('focus');
-            // }
-            // $(btn-select-click).focus(function() {
-            //     console.log('focusEvent btn-select-click');
-            //     self.selectMode1 = true;
-            //     self.selectMode2 = false;
-            //     self.selectMode3 = false;
-            // });
-            // $(btn-select).focus(function() {
-            //     console.log('focusEvent btn-select');
-            //     self.selectMode1 = true;
-            //     self.selectMode2 = false;
-            //     self.selectMode3 = false;
-            // });
-            // $(btn-today-click).focus(function() {
-            //     console.log('focusEvent btn-today-click');
-            //     self.selectMode1 = false;
-            //     self.selectMode2 = true;
-            //     self.selectMode3 = false;
-            // });
-            // $(btn-today).focus(function() {
-            //     console.log('focusEvent btn-today');
-            //     self.selectMode1 = false;
-            //     self.selectMode2 = true;
-            //     self.selectMode3 = false;
-            // });
-            // $(btn-today-click).focus(function() {
-            //     console.log('focusEvent btn-today-click');
-            //     self.selectMode1 = false;
-            //     self.selectMode2 = true;
-            //     self.selectMode3 = false;
-            // });
-            // $(btn-today).focus(function() {
-            //     console.log('focusEvent btn-today');
-            //     self.selectMode1 = false;
-            //     self.selectMode2 = true;
-            //     self.selectMode3 = false;
-            // });
-        },
         voiceSelectMode() {
             var self = this;
             this.options={};
@@ -200,25 +118,25 @@ export default {
                         self.sendTTS("번호를 먼저 선택해주세요");
                         console.log('[MainCategory] 다음 페이지');
                         break;
+                    case 'ShowBookmarkList' :
+                        self.sendTTS("북마크 목록으로 이동합니다");
+                        self.pageMove(3);
+                        break;
                     default:
                         break;
                 }
             };
 
             // 리모콘 key event 제어
-            window.onkeydown = function(event) {
-                
+            window.onkeydown = function(event) {   
                 switch(event.keyCode) {
                     case 49: // 1 
-                        self.focusEvent();
                         self.pageMove(1);
                         break;
                     case 50:
-                        self.focusEvent();
                         self.pageMove(2);   
                         break;
                     case 51:
-                        self.focusEvent();
                         self.pageMove(3);
                         break;
                 }
@@ -298,21 +216,15 @@ export default {
             
             switch(id) {
                 case 1:
-                    self.selectMode1 = true;
-                    self.selectMode2 = false;
-                    self.selectMode3 = false;
+                    // self.selectMode = 1;
                     setTimeout(function() {self.$router.push('/detail/favor')}, 1000);
                     break;
                 case 2:
-                    self.selectMode1 = false;
-                    self.selectMode2 = true;
-                    self.selectMode3 = false;
+                    // self.selectMode = 2;
                     setTimeout(function() {self.$router.push('/resultToday')}, 1000);
                     break;
                 case 3:
-                    self.selectMode1 = false;
-                    self.selectMode2 = false;
-                    self.selectMode3 = true;
+                    // self.selectMode = 3;
                     setTimeout(function() {self.$router.push('/bookmarkMain')}, 1000);
                     break;
                 default:

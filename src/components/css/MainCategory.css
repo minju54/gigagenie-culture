@@ -3,35 +3,6 @@
     padding-top: 50px;
 }
 
-/* #div-select, #div-today, #div-book{
-    background: transparent; 
-    background-color: rgba(0, 0, 0, 0.3); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); 
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )"; 
-    padding: 20px;
-    box-shadow: 5px 5px 3px #000000;
-    border-radius: 50px 0px 0px 0px ;
-}
-
-#div-select:focus, #div-today:focus, #div-book:focus{
-    background: transparent; 
-    background-color: rgba(255, 255, 255, 0.3); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); 
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )"; 
-    padding: 20px;
-    box-shadow: 5px 5px 3px #000000;
-    border-radius: 50px 0px 0px 0px ;
-}
-
-#div-select:hover, #div-today:hover, #div-book:hover{
-    background: transparent; 
-    background-color: rgba(255, 255, 255, 0.3); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); 
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )"; 
-    padding: 20px;
-    box-shadow: 5px 5px 3px #000000;
-    border-radius: 50px 0px 0px 0px ;
-} */
 #btn-select {
     background: transparent; 
     background-color: rgba( 255, 255, 255, 0.3); 

@@ -12186,7 +12186,7 @@ if (false) {(function () {
             // setTimeout(function() {self.$router.push('/detail/favor')}, 2000);
             setTimeout(function () {
                 self.$router.push('/mainCategory');
-            }, 2000);
+            }, 1000);
             self.getUserSetting();
         },
         getUserSetting: function getUserSetting() {
@@ -12498,14 +12498,11 @@ module.exports = function (it, key) {
         return {
             options: {},
             info_text: "번호를 말씀해주세요",
-            selectMode1: false,
-            selectMode2: false,
-            selectMode3: false
+            selectMode: ''
         };
     },
     created: function created() {
         this.init();
-        // this.focusEvent();
     },
 
     components: {
@@ -12528,85 +12525,6 @@ module.exports = function (it, key) {
                 }
             });
         },
-        focusEvent: function focusEvent() {
-            console.log('focusEvent');
-            $('btn-today').removeClass('focus');
-            $(this).removeClass('btn-today-click');
-            $(this).removeClass('btn-select-click');
-            $(this).removeClass('btn-book-click');
-            $(this).removeClass('btn-today');
-            $(this).removeClass('btn-select');
-            $(this).removeClass('btn-book');
-
-            $('btn-today-click').off();
-            $('btn-today').off();
-            $('btn-book').off();
-            $('btn-book-click').off();
-            $('btn-select').off();
-            $('btn-selcect-click').off();
-
-            $('btn-today-click').off('focus');
-            $('btn-today').off('focus');
-            $('btn-book').off('focus');
-            $('btn-book-click').off('focus');
-            $('btn-select').off('focus');
-            $('btn-selcect-click').off('focus');
-
-            // if (this.selectMode1 === true) {
-            //     $('btn-today-click').off('focus');
-            //     $('btn-today').off('focus');
-            //     $('btn-book').off('focus');
-            //     $('btn-book-click').off('focus');
-            // }
-            // if (this.selectMode2 === true) {
-            //     $('btn-select-click').off('focus');
-            //     $(btn-select).off('focus');
-            //     $(btn-book).off('focus');
-            //     $(btn-book-click).off('focus');
-            // }
-            // if (this.selectMode3 === true) {
-            //     $(btn-today-click).off('focus');
-            //     $(btn-today).off('focus');
-            //     $(btn-select).off('focus');
-            //     $(btn-select-click).off('focus');
-            // }
-            // $(btn-select-click).focus(function() {
-            //     console.log('focusEvent btn-select-click');
-            //     self.selectMode1 = true;
-            //     self.selectMode2 = false;
-            //     self.selectMode3 = false;
-            // });
-            // $(btn-select).focus(function() {
-            //     console.log('focusEvent btn-select');
-            //     self.selectMode1 = true;
-            //     self.selectMode2 = false;
-            //     self.selectMode3 = false;
-            // });
-            // $(btn-today-click).focus(function() {
-            //     console.log('focusEvent btn-today-click');
-            //     self.selectMode1 = false;
-            //     self.selectMode2 = true;
-            //     self.selectMode3 = false;
-            // });
-            // $(btn-today).focus(function() {
-            //     console.log('focusEvent btn-today');
-            //     self.selectMode1 = false;
-            //     self.selectMode2 = true;
-            //     self.selectMode3 = false;
-            // });
-            // $(btn-today-click).focus(function() {
-            //     console.log('focusEvent btn-today-click');
-            //     self.selectMode1 = false;
-            //     self.selectMode2 = true;
-            //     self.selectMode3 = false;
-            // });
-            // $(btn-today).focus(function() {
-            //     console.log('focusEvent btn-today');
-            //     self.selectMode1 = false;
-            //     self.selectMode2 = true;
-            //     self.selectMode3 = false;
-            // });
-        },
         voiceSelectMode: function voiceSelectMode() {
             var self = this;
             this.options = {};
@@ -12627,6 +12545,10 @@ module.exports = function (it, key) {
                         self.sendTTS("번호를 먼저 선택해주세요");
                         console.log('[MainCategory] 다음 페이지');
                         break;
+                    case 'ShowBookmarkList':
+                        self.sendTTS("북마크 목록으로 이동합니다");
+                        self.pageMove(3);
+                        break;
                     default:
                         break;
                 }
@@ -12634,19 +12556,15 @@ module.exports = function (it, key) {
 
             // 리모콘 key event 제어
             window.onkeydown = function (event) {
-
                 switch (event.keyCode) {
                     case 49:
                         // 1 
-                        self.focusEvent();
                         self.pageMove(1);
                         break;
                     case 50:
-                        self.focusEvent();
                         self.pageMove(2);
                         break;
                     case 51:
-                        self.focusEvent();
                         self.pageMove(3);
                         break;
                 }
@@ -12722,25 +12640,19 @@ module.exports = function (it, key) {
 
             switch (id) {
                 case 1:
-                    self.selectMode1 = true;
-                    self.selectMode2 = false;
-                    self.selectMode3 = false;
+                    // self.selectMode = 1;
                     setTimeout(function () {
                         self.$router.push('/detail/favor');
                     }, 1000);
                     break;
                 case 2:
-                    self.selectMode1 = false;
-                    self.selectMode2 = true;
-                    self.selectMode3 = false;
+                    // self.selectMode = 2;
                     setTimeout(function () {
                         self.$router.push('/resultToday');
                     }, 1000);
                     break;
                 case 3:
-                    self.selectMode1 = false;
-                    self.selectMode2 = false;
-                    self.selectMode3 = true;
+                    // self.selectMode = 3;
                     setTimeout(function () {
                         self.$router.push('/bookmarkMain');
                     }, 1000);
@@ -14315,7 +14227,7 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
         _this2.show_price = $(detailData).find("price").text();
         _this2.show_phone_number = $(detailData).find("phone").text();
         if ($(detailData).find("placeAddr").text().length > 0) {
-          _this2.show_place = $(detailData).find("placeAddr").text();
+          _this2.show_place = $(detailData).find("placeAddr").text();d;
         } else {
           _this2.show_place = $(detailData).find("place").text();
         }
@@ -14477,7 +14389,7 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
           }
           self.sendTTS(msg);
         } else {
-          console.log("[ResultMain]북마크 실패");
+          console.log("[ResultMain]북마크 실패" + result_cd + " " + result_msg);
         }
       });
     },
@@ -14679,7 +14591,7 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
                         break;
                     case 'DeleteBookmark':
                         if (self.bookmarkState == 1) {
-                            self.sendTTS("북마크에 저장했습니다.");
+                            self.sendTTS("북마크에서 삭제했습니다.");
                             self.checkBookMarkState();
                         } else {
                             self.sendTTS("북마크에 존재하지않는 정보입니다.");
@@ -14688,6 +14600,11 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
                     case 'MainMenu':
                         self.sendTTS("홈화면으로 이동합니다");
                         self.$router.replace({ path: '/' });
+                        break;
+                    case 'ShowBookmarkList':
+                        self.sendTTS("북마크 목록으로 이동합니다");
+                        self.$router.replace({ path: '/bookmarkMain' });
+                        break;
                     default:
                         break;
                 }
@@ -14830,12 +14747,15 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
             gigagenie.appdata.getKeyData(this.options, function (result_cd, result_msg, extra) {
                 switch (result_cd) {
                     case 200:
+                        self.bookmarkState = -1;
                         self.bookmarkListJson = JSON.parse(extra.data);
                         $.each(self.bookmarkListJson, function (index, data) {
-                            //console.log('bookmarkList key ', index)
+                            console.log('bookmarkList key ', index);
                             if (data.seq === self.show_seqNum) {
+                                console.log('[ResultToday]북마크에 존재하는 정보');
                                 self.bookmarkState = 1;
                             } else {
+                                console.log('[ResultToday]북마크에 존재하지 않는 정보');
                                 self.bookmarkState = -1;
                             }
                         });
@@ -14952,7 +14872,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n    padding-right: 255px;\n}\n#title-top {\n    color: #ffffff;\n    padding-top: 13px;\n    padding-bottom: 13px;\n    padding-left: 37px;\n    padding-right: 30px;\n    text-align: left;\n    font-size: 25px;\n    font-weight: bold;\n    background: rgba(221, 182, 83, 0.8);\n    border-radius: 10px;\n    width: 190px;\n}\n\n#no-result-text-top {\n    color: #ffffff;\n    font-size: 25px;\n    padding-top: 50px;\n}\n\n#no-result-text-bottom {\n    color: #ffffff;\n    font-size: 25px;\n}\n\n#not-found {\n    width: 100px;\n    height: 100px;\n    margin-top: 150px;\n}\n\n#idx-circle {\n    width: 30px;\n    height: 30px;\n    margin-left: 115px;\n    margin-bottom: 7px;\n}\n\n#content-row {\n    margin-top: 5px;\n}\n\n#bookmark-item{\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.5);\n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    box-shadow: 5px 5px 3px #000000;\n    zoom: 1;\n    border-radius: 10px;\n    width: 440px;\n    height: 510px;\n}\n\n#item-col {\n    margin-right: 120px;\n}\n\n#prev-button, #next-button {\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n    background:transparent;\n    border: transparent;\n}\n\n#arrow-img{\n    width: 25px;\n    height: 25px;\n}\n\n#thumbnail {\n    width: 270px;\n    height: 310px;\n    border-radius: 10px;\n    margin-bottom: 15px;\n}\n\n#t-text {\n    font-size: 19px;\n    text-align: center;\n    /* margin-left: 10px; */\n}\n\n#c-text {\n    font-size: 19px;\n    text-align: left;\n    display: inline-block; \n    width: 350px; \n    white-space: nowrap; \n    overflow: hidden; \n    text-overflow: ellipsis;\n}\n#delete-button {\n    background:transparent;\n    border: transparent;\n    margin-left: 115px;\n    margin-top: 5px;\n}\n#delete-img{\n    width: 27px;\n    height: 27px;\n}\n\n#btn-cover{\n    margin-top: 20px;\n    text-align: center;\n}\n\n#show-title{\n    font-size: 25px;\n    padding-top: 10px;\n    display: inline-block; \n    width: 400px; \n    white-space: nowrap; \n    overflow: hidden; \n    text-overflow: ellipsis;\n\n}", ""]);
+exports.push([module.i, "#body {\n    height: 665px;\n    padding-left: 255px;\n    padding-right: 255px;\n}\n#title-top {\n    color: #ffffff;\n    padding-top: 13px;\n    padding-bottom: 13px;\n    padding-left: 37px;\n    padding-right: 30px;\n    text-align: left;\n    font-size: 25px;\n    font-weight: bold;\n    background: rgba(221, 182, 83, 0.8);\n    border-radius: 10px;\n    width: 190px;\n}\n\n#no-result-text-top {\n    color: #ffffff;\n    font-size: 25px;\n    padding-top: 50px;\n}\n\n#no-result-text-bottom {\n    color: #ffffff;\n    font-size: 25px;\n}\n\n#not-found {\n    width: 100px;\n    height: 100px;\n    margin-top: 150px;\n}\n\n#idx-circle {\n    width: 30px;\n    height: 30px;\n    margin-left: 115px;\n    margin-bottom: 7px;\n}\n\n#delete-button {\n    background:transparent;\n    border: transparent;\n    /* margin-bottom: 10px; */\n    margin-left: 115px; \n    margin-top: 5px;\n}\n#delete-img{\n    width: 27px;\n    height: 27px;\n}\n\n#content-row {\n    margin-top: 5px;\n}\n\n#bookmark-item{\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.5);\n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    box-shadow: 5px 5px 3px #000000;\n    zoom: 1;\n    border-radius: 10px;\n    width: 440px;\n    height: 585px;\n}\n\n#item-col {\n    margin-right: 120px;\n}\n\n#prev-button, #next-button {\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n    background:transparent;\n    border: transparent;\n}\n\n#arrow-img{\n    width: 25px;\n    height: 25px;\n}\n\n#thumbnail {\n    width: 270px;\n    height: 370px;\n    border-radius: 10px;\n    margin-bottom: 5px;\n}\n\n#t-text {\n    font-size: 19px;\n    text-align: center;\n    /* margin-left: 10px; */\n}\n\n#c-text {\n    font-size: 19px;\n    text-align: left;\n    display: inline-block; \n    width: 350px; \n    white-space: nowrap; \n    overflow: hidden; \n    text-overflow: ellipsis;\n}\n\n\n#btn-cover{\n    margin-top: 20px;\n    text-align: center;\n}\n\n#show-title{\n    font-size: 25px;\n    padding-top: 10px;\n    display: inline-block; \n    width: 400px; \n    white-space: nowrap; \n    overflow: hidden; \n    text-overflow: ellipsis;\n\n}", ""]);
 
 // exports
 
@@ -15237,11 +15157,11 @@ module.exports = function (it) {
     },
     updated: function updated() {
         this.init();
-        var thumbnail_img = document.getElementById('thumbnail');
-        if (thumbnail_img && thumbnail_img.style) {
-            thumbnail_img.style.height = '310px';
-            thumbnail_img.style.width = '270px';
-        }
+        // var thumbnail_img = document.getElementById('thumbnail');
+        // if(thumbnail_img && thumbnail_img.style) {
+        //     thumbnail_img.style.height = '310px';
+        //     thumbnail_img.style.width = '270px';
+        // }
     },
 
     watch: {
@@ -15250,6 +15170,7 @@ module.exports = function (it) {
     methods: {
         nextPage: function nextPage() {
             this.pageNum += 1;
+            console.log('nextPage : ' + this.pageNum);
         },
         prevPage: function prevPage() {
             this.pageNum -= 1;
@@ -15315,9 +15236,10 @@ module.exports = function (it) {
                         }
                         break;
                     case 'NextList':
-                        if (self.pageNum >= pageCount - 1) {
+                        if (self.pageNum >= self.pageCount - 1) {
                             self.sendTTS("다음 목록이 없습니다");
                         } else {
+                            console.log('nextList gogo!!');
                             self.nextPage();
                         }
                         break;
@@ -15382,6 +15304,7 @@ module.exports = function (it) {
             return page;
         },
         paginatedData: function paginatedData() {
+            console.log('computed pageNum: ' + this.pageNum);
             var start = this.pageNum * this.pageSize,
                 end = start + this.pageSize;
             return this.listArray.slice(start, end);
@@ -19491,7 +19414,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "#content{\n    height: 665px;\n    padding-top: 50px;\n}\n\n/* #div-select, #div-today, #div-book{\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.3); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    padding: 20px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#div-select:focus, #div-today:focus, #div-book:focus{\n    background: transparent; \n    background-color: rgba(255, 255, 255, 0.3); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    padding: 20px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#div-select:hover, #div-today:hover, #div-book:hover{\n    background: transparent; \n    background-color: rgba(255, 255, 255, 0.3); \n    filter: progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff ); \n    -ms-filter: \"progid:DXImageTransform.Microsoft.gradient( startColorStr=#ffffffff, endColorStr=#ffffffff )\"; \n    padding: 20px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n} */\n#btn-select {\n    background: transparent; \n    background-color: rgba( 255, 255, 255, 0.3); \n    border: none;\n    width: 545px;\n    height: 540px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n#btn-today{\n    background: transparent; \n    background-color: rgba( 255, 255, 255, 0.3); \n    border: none;\n    width: 545px;\n    height: 260px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#btn-book {\n    margin-top: 20px;\n    background: transparent; \n    /* background-color: rgba(0, 0, 0, 0.6);  */\n    background-color: rgba( 255, 255, 255, 0.3); \n    border: none;\n    width: 545px;\n    height: 260px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n#btn-select-click {\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.6);\n    border : 5px solid rgb(221, 182, 83);\n    width: 545px;\n    height: 540px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n#btn-today-click {\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.6);\n    border : 5px solid rgb(221, 182, 83);\n    width: 545px;\n    height: 260px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#btn-book-click {\n    margin-top: 20px;\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.6);\n    border : 5px solid rgb(221, 182, 83);\n    width: 545px;\n    height: 260px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#btn-select:focus, #btn-today:focus, #btn-book:focus {\n    background-color: rgba(0, 0, 0, 0.6);\n    border : 5px solid rgb(221, 182, 83);\n}\n\n#text-title-top {\n    font-size: 25px;\n    margin-bottom: 30px;\n}\n\n#text-select {\n    font-size: 50px;\n    color : rgb(221, 182, 83);\n    position: relative;\n    text-align: right;\n    padding-right: 20px;\n}\n#text-info-top{\n    font-size: 20px;\n    position: relative;\n    text-align: right; \n    padding-right: 20px;\n}\n\n#text-info-bottom {\n    font-size: 20px;\n    position: relative;\n    text-align: right;\n    padding-right: 20px;\n}\n\n#text-today, #text-book {\n    font-size: 50px;\n    position: relative;\n    text-align: right; \n    padding-right: 20px;\n    /* padding-bottom: 50px; */\n    color : rgb(221, 182, 83);\n}\n\n#text-info {\n    font-size: 20px;\n    position: relative;\n    text-align: right; \n    padding-right: 20px;\n}\n\n#num-circle-right {\n    width: 40px;\n    height: 40px;\n    margin-right: 450px;\n    margin-bottom: 60px;\n}\n\n#num-circle-left {\n    width: 40px;\n    height: 40px;\n    margin-right: 450px;\n    margin-bottom: 290px;\n}", ""]);
+exports.push([module.i, "#content{\n    height: 665px;\n    padding-top: 50px;\n}\n\n#btn-select {\n    background: transparent; \n    background-color: rgba( 255, 255, 255, 0.3); \n    border: none;\n    width: 545px;\n    height: 540px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n#btn-today{\n    background: transparent; \n    background-color: rgba( 255, 255, 255, 0.3); \n    border: none;\n    width: 545px;\n    height: 260px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#btn-book {\n    margin-top: 20px;\n    background: transparent; \n    /* background-color: rgba(0, 0, 0, 0.6);  */\n    background-color: rgba( 255, 255, 255, 0.3); \n    border: none;\n    width: 545px;\n    height: 260px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n#btn-select-click {\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.6);\n    border : 5px solid rgb(221, 182, 83);\n    width: 545px;\n    height: 540px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n#btn-today-click {\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.6);\n    border : 5px solid rgb(221, 182, 83);\n    width: 545px;\n    height: 260px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#btn-book-click {\n    margin-top: 20px;\n    background: transparent; \n    background-color: rgba(0, 0, 0, 0.6);\n    border : 5px solid rgb(221, 182, 83);\n    width: 545px;\n    height: 260px;\n    box-shadow: 5px 5px 3px #000000;\n    border-radius: 50px 0px 0px 0px ;\n}\n\n#btn-select:focus, #btn-today:focus, #btn-book:focus {\n    background-color: rgba(0, 0, 0, 0.6);\n    border : 5px solid rgb(221, 182, 83);\n}\n\n#text-title-top {\n    font-size: 25px;\n    margin-bottom: 30px;\n}\n\n#text-select {\n    font-size: 50px;\n    color : rgb(221, 182, 83);\n    position: relative;\n    text-align: right;\n    padding-right: 20px;\n}\n#text-info-top{\n    font-size: 20px;\n    position: relative;\n    text-align: right; \n    padding-right: 20px;\n}\n\n#text-info-bottom {\n    font-size: 20px;\n    position: relative;\n    text-align: right;\n    padding-right: 20px;\n}\n\n#text-today, #text-book {\n    font-size: 50px;\n    position: relative;\n    text-align: right; \n    padding-right: 20px;\n    /* padding-bottom: 50px; */\n    color : rgb(221, 182, 83);\n}\n\n#text-info {\n    font-size: 20px;\n    position: relative;\n    text-align: right; \n    padding-right: 20px;\n}\n\n#num-circle-right {\n    width: 40px;\n    height: 40px;\n    margin-right: 450px;\n    margin-bottom: 60px;\n}\n\n#num-circle-left {\n    width: 40px;\n    height: 40px;\n    margin-right: 450px;\n    margin-bottom: 290px;\n}", ""]);
 
 // exports
 
@@ -19515,7 +19438,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-sm-6" }, [
-            _vm.selectMode1 === true
+            _vm.selectMode === 1
               ? _c(
                   "button",
                   {
@@ -19577,7 +19500,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-sm-6" }, [
-            _vm.selectMode2 === true
+            _vm.selectMode === 2
               ? _c(
                   "button",
                   {
@@ -19629,7 +19552,7 @@ var render = function() {
                   ]
                 ),
             _vm._v(" "),
-            _vm.selectMode3 === true
+            _vm.selectMode === 3
               ? _c(
                   "button",
                   {
@@ -22869,14 +22792,7 @@ var render = function() {
                 _c("b", [_vm._v(_vm._s(p.title))])
               ]),
               _vm._v(" "),
-              _c("img", {
-                attrs: {
-                  id: "thumbnail",
-                  src: p.thumbnail,
-                  width: "270px",
-                  height: "310px"
-                }
-              }),
+              _c("img", { attrs: { id: "thumbnail", src: p.thumbnail } }),
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [
                 _vm._m(0, true),
@@ -23029,7 +22945,7 @@ if (false) {
 /* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "delete-button.png?8ed206202da0df9ff6a306891a98a30a";
+module.exports = __webpack_require__.p + "dlt-btn.png?e11d518bc8b16700f23877ac72530116";
 
 /***/ }),
 /* 158 */
@@ -23081,14 +22997,10 @@ var render = function() {
             }),
             _vm._v(" "),
             _c("p", { attrs: { id: "no-result-text-top" } }, [
-              _vm._v(
-                "죄송합니다. 선택하신 카테고리에 해당하는 정보가 없습니다."
-              )
+              _vm._v("북마크 목록이 존재하지 않습니다.")
             ]),
             _vm._v(" "),
-            _c("p", { attrs: { id: "no-result-text-bottom" } }, [
-              _vm._v("다른 카테고리로 선택해보세요.")
-            ])
+            _c("p", { attrs: { id: "no-result-text-bottom" } }, [_vm._v("-")])
           ]),
       _vm._v(" "),
       _c("main-footer")

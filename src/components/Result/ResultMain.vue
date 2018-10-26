@@ -157,7 +157,7 @@ export default {
                   break;
               case 'MainMenu':
                 self.sendTTS("홈화면으로 이동합니다");
-                self.$router.replace({path: '/'});
+                self.$router.replace({path: '/mainCategory'});
               default:
                   break;
           }
@@ -327,7 +327,7 @@ export default {
         this.show_price = $(detailData).find("price").text();
         this.show_phone_number = $(detailData).find("phone").text();
         if ($(detailData).find("placeAddr").text().length > 0) {
-          this.show_place = $(detailData).find("placeAddr").text();
+          this.show_place = $(detailData).find("placeAddr").text();d
         } else {
           this.show_place = $(detailData).find("place").text();
         }
@@ -487,7 +487,7 @@ export default {
             }
             self.sendTTS(msg);
         } else {
-            console.log("[ResultMain]북마크 실패");
+            console.log("[ResultMain]북마크 실패" + result_cd + " " + result_msg);
         }
       });
     },
