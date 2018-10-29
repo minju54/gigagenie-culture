@@ -12157,7 +12157,7 @@ if (false) {(function () {
             gigagenie.voice.onActionEvent = function (extra) {
                 if (extra.actioncode === 'MainMenu') {
                     self.sendTTS("홈화면으로 이동합니다");
-                    self.$router.replace({ path: '/' });
+                    self.$router.replace({ path: '/mainCategory' });
                 }
             };
 
@@ -12872,7 +12872,7 @@ module.exports = function (it, key) {
                 console.log('[DetailFavor]발화 문장: ' + extra.uword + " " + extra.actioncode);
                 if (extra.actioncode === "MainMenu") {
                     self.sendTTS("홈화면으로 이동합니다");
-                    self.$router.replace({ path: '/' });
+                    self.$router.replace({ path: '/mainCategory' });
                 }
             };
         },
@@ -13156,7 +13156,7 @@ module.exports = __webpack_require__.p + "favor-dance.jpg?f7418a414a89aa46b2a078
             gigagenie.voice.onActionEvent = function (extra) {
                 if (extra.actioncode === 'MainMenu') {
                     self.sendTTS("홈화면으로 이동합니다");
-                    self.$router.replace({ path: '/' });
+                    self.$router.replace({ path: '/mainCategory' });
                 }
             };
         },
@@ -13420,7 +13420,7 @@ module.exports = __webpack_require__.p + "fee-matter.jpg?736a6fdc781ddf2ccfbf7ae
             gigagenie.voice.onActionEvent = function (extra) {
                 if (extra.actioncode === 'MainMenu') {
                     self.sendTTS("홈화면으로 이동합니다");
-                    self.$router.replace({ path: '/' });
+                    self.$router.replace({ path: '/mainCategory' });
                 }
             };
         },
@@ -13692,7 +13692,7 @@ module.exports = __webpack_require__.p + "group-family.jpg?55c958a462f1b75eb5160
                         break;
                     case 'MainMenu':
                         self.sendTTS("홈화면으로 이동합니다");
-                        self.$router.replace({ path: '/' });
+                        self.$router.replace({ path: '/mainCategory' });
                     default:
                         break;
                 }
@@ -14046,7 +14046,7 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
             break;
           case 'MainMenu':
             self.sendTTS("홈화면으로 이동합니다");
-            self.$router.replace({ path: '/' });
+            self.$router.replace({ path: '/mainCategory' });
           default:
             break;
         }
@@ -14220,17 +14220,17 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
         } // end of for
 
         // 화면에 데이터 뿌리기 (썸네일, 타이틀, 가격, 문의, 장소)
-        // self.showSeqNum = $(detailData).find("seq").text();
         console.log('[ResultMain]seqNum: ', self.showSeqNum);
         _this2.show_thumbnail = $(detailData).find("imgUrl").text();
         _this2.show_title = $(detailData).find("title").text();
         _this2.show_price = $(detailData).find("price").text();
         _this2.show_phone_number = $(detailData).find("phone").text();
         if ($(detailData).find("placeAddr").text().length > 0) {
-          _this2.show_place = $(detailData).find("placeAddr").text();d;
+          _this2.show_place = $(detailData).find("placeAddr").text();
         } else {
           _this2.show_place = $(detailData).find("place").text();
         }
+
         // (날짜)
         var startD = $(detailData).find("startDate").text();
         var endD = $(detailData).find("endDate").text();
@@ -14362,7 +14362,8 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
       } else {
         // 북마크 안되어 있음 -> 클릭하면 북마크 하기!
         // 북마크에 추가할 내용
-        var newData = { seq: this.showSeqNum,
+        var newData = [];
+        newData = { seq: this.showSeqNum,
           title: this.show_title,
           thumbnail: this.show_thumbnail,
           date: this.show_date,
@@ -14505,7 +14506,7 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
         return {
             options: {},
             info_text: "오늘의 추천 문화입니다.",
-            infoMatched: 1,
+            infoMatched: 0,
             show_seqNum: "",
             show_title: "",
             show_place: "",
@@ -14599,7 +14600,7 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
                         break;
                     case 'MainMenu':
                         self.sendTTS("홈화면으로 이동합니다");
-                        self.$router.replace({ path: '/' });
+                        self.$router.replace({ path: '/mainCategory' });
                         break;
                     case 'ShowBookmarkList':
                         self.sendTTS("북마크 목록으로 이동합니다");
@@ -14660,8 +14661,8 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
             console.log('[ResultToday]userAddress: ' + userAddress);
             // 오늘 하는 문화 정보 찾기
             $.ajax({
-                url: this.$store.getters.getBaseURI + '/period?ServiceKey=' + this.$store.getters.getServiceKey + '&cPage=1&rows=50&from=' + this.dt_today + '&to=' + this.dt_today + '&sortStdr=3',
-                //url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=20181024&to=20181024&sortStdr=1`,
+                // url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=${this.dt_today}&to=${this.dt_today}&sortStdr=3`,
+                url: this.$store.getters.getBaseURI + '/period?ServiceKey=' + this.$store.getters.getServiceKey + '&cPage=1&rows=50&from=20181030&to=20181030&sortStdr=3',
                 type: "GET",
                 dataType: "xml",
                 async: false,
@@ -14677,7 +14678,7 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
                             return false; // 하나 찾고 loop 중지
                         } else {
                             self.infoMatched = 0;
-                            //console.log('[ResultToday] false: ', $(this).find("area").text());
+                            console.log('[ResultToday] false: ', $(this).find("area").text());
                         }
                     });
                 },
@@ -14697,6 +14698,7 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
                 dataType: "xml",
                 async: false,
                 success: function success(res) {
+                    console.log('[ResultToday] res: ' + res);
                     _this2.show_title = $(res).find("title").text();
                     _this2.show_thumbnail = $(res).find("imgUrl").text();
                     if ($(res).find("placeAddr").text() > 0) {
@@ -14821,7 +14823,8 @@ exports.push([module.i, "#div-result {\n    padding-left: 255px;\n    padding-ri
             } else {
                 // 북마크 안되어 있음 -> 클릭하면 북마크 하기!
                 // 북마크에 추가할 내용
-                var newData = { seq: this.show_seqNum,
+                var newData = [];
+                newData = { seq: this.show_seqNum,
                     title: this.show_title,
                     thumbnail: this.show_thumbnail,
                     date: this.show_date,
@@ -15226,7 +15229,7 @@ module.exports = function (it) {
                         break;
                     case 'MainMenu':
                         self.sendTTS("홈화면으로 이동합니다");
-                        self.$router.replace({ path: '/' });
+                        self.$router.replace({ path: '/mainCategory' });
                         break;
                     case 'PreList':
                         if (self.pageNum === 0) {
@@ -15236,7 +15239,8 @@ module.exports = function (it) {
                         }
                         break;
                     case 'NextList':
-                        if (self.pageNum >= self.pageCount - 1) {
+                        console.log('[PaginatedList] nextlist enter');
+                        if (self.pageNum >= self.pageCount() - 1) {
                             self.sendTTS("다음 목록이 없습니다");
                         } else {
                             console.log('nextList gogo!!');
@@ -15304,7 +15308,7 @@ module.exports = function (it) {
             return page;
         },
         paginatedData: function paginatedData() {
-            console.log('computed pageNum: ' + this.pageNum);
+            console.log('computed pageNum: ' + this.pageNum + ' pageCount: ' + this.pageCount);
             var start = this.pageNum * this.pageSize,
                 end = start + this.pageSize;
             return this.listArray.slice(start, end);

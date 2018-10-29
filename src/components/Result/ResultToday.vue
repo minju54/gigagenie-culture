@@ -56,7 +56,7 @@ export default {
         return {
             options: {},
             info_text: "오늘의 추천 문화입니다.",
-            infoMatched : 1,
+            infoMatched : 0,
             show_seqNum: "",
             show_title: "",
             show_place: "",
@@ -212,8 +212,8 @@ export default {
             console.log('[ResultToday]userAddress: ' + userAddress);
             // 오늘 하는 문화 정보 찾기
             $.ajax({
-                url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=${this.dt_today}&to=${this.dt_today}&sortStdr=3`,
-                //url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=20181024&to=20181024&sortStdr=1`,
+                // url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=${this.dt_today}&to=${this.dt_today}&sortStdr=3`,
+                url: `${this.$store.getters.getBaseURI}/period?ServiceKey=${this.$store.getters.getServiceKey}&cPage=1&rows=50&from=20181030&to=20181030&sortStdr=3`,
                 type: "GET",
                 dataType: "xml",
                 async: false,
@@ -229,7 +229,7 @@ export default {
                             return false; // 하나 찾고 loop 중지
                         } else {
                             self.infoMatched = 0;
-                            //console.log('[ResultToday] false: ', $(this).find("area").text());
+                            console.log('[ResultToday] false: ', $(this).find("area").text());
                         }
                     }); 
                 },
@@ -245,6 +245,7 @@ export default {
                 dataType: "xml",
                 async: false,
                 success: res => {
+                    console.log('[ResultToday] res: ' + res);
                     this.show_title = $(res).find("title").text();
                     this.show_thumbnail = $(res).find("imgUrl").text();
                     if ($(res).find("placeAddr").text() > 0) {
@@ -364,7 +365,8 @@ export default {
                 });
             } else { // 북마크 안되어 있음 -> 클릭하면 북마크 하기!
                 // 북마크에 추가할 내용
-                var newData = 
+                var newData = [];
+                newData = 
                     {   seq:this.show_seqNum, 
                         title:this.show_title, 
                         thumbnail:this.show_thumbnail, 

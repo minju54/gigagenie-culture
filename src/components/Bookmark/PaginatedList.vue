@@ -76,7 +76,7 @@ export default {
     methods: {
         nextPage () {
             this.pageNum += 1;
-            console.log('nextPage : ' + this.pageNum);
+            console.log('nextPage : ' + this.pageNum );
         },
         prevPage () {
             this.pageNum -= 1;
@@ -141,7 +141,8 @@ export default {
                     }
                     break;
                 case 'NextList':
-                    if (self.pageNum >= self.pageCount - 1) {
+                    console.log('[PaginatedList] nextlist enter');
+                    if (self.pageNum >= self.pageCount() - 1) {
                         self.sendTTS("다음 목록이 없습니다");
                     } else {
                         console.log('nextList gogo!!');
@@ -211,7 +212,7 @@ export default {
             return page;
         },
         paginatedData () {
-            console.log('computed pageNum: '+this.pageNum);
+            console.log('computed pageNum: '+this.pageNum + ' pageCount: ' + this.pageCount);
             const start = this.pageNum * this.pageSize,
                 end = start + this.pageSize;
             return this.listArray.slice(start, end);

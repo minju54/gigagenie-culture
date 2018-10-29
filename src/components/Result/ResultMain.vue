@@ -320,17 +320,17 @@ export default {
         } // end of for
         
         // 화면에 데이터 뿌리기 (썸네일, 타이틀, 가격, 문의, 장소)
-        // self.showSeqNum = $(detailData).find("seq").text();
         console.log('[ResultMain]seqNum: ', self.showSeqNum);
         this.show_thumbnail = $(detailData).find("imgUrl").text();
         this.show_title = $(detailData).find("title").text();
         this.show_price = $(detailData).find("price").text();
         this.show_phone_number = $(detailData).find("phone").text();
         if ($(detailData).find("placeAddr").text().length > 0) {
-          this.show_place = $(detailData).find("placeAddr").text();d
+          this.show_place = $(detailData).find("placeAddr").text();
         } else {
           this.show_place = $(detailData).find("place").text();
         }
+        
         // (날짜)
         var startD = $(detailData).find("startDate").text();
         var endD = $(detailData).find("endDate").text();
@@ -459,7 +459,8 @@ export default {
         });
       } else { // 북마크 안되어 있음 -> 클릭하면 북마크 하기!
         // 북마크에 추가할 내용
-        var newData = 
+        var newData = [];
+        newData = 
           {   seq:this.showSeqNum, 
               title:this.show_title, 
               thumbnail:this.show_thumbnail, 
